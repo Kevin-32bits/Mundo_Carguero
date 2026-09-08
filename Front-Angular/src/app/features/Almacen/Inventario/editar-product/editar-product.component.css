@@ -1,0 +1,226 @@
+/* --- OVERLAY --- */
+.editar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background: rgba(0, 0, 0, 0.500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* --- MODAL --- */
+.editar-modal {
+  width: min(700px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- CABECERA --- */
+.ux-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 2rem 1.5rem;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ux-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ux-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ux-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.ux-subtitle strong {
+  color: #c61f2b; /* SKU destacado en rojo */
+}
+
+.ux-btn-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.ux-btn-close:hover {
+  color: #111827;
+}
+
+/* --- FORMULARIO Y SECCIONES --- */
+.ux-form {
+  padding: 1.5rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.ux-section-title {
+  margin: 0 0 1.2rem 0;
+  font-size: 0.8rem;
+  color: #c61f2b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.ux-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.ux-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.span-2 {
+  grid-column: 1 / -1;
+}
+
+/* --- CAMPOS DE TEXTO (INPUTS) --- */
+.ux-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ux-input-group label {
+  font-size: 0.8rem;
+  color: #374151;
+  font-weight: 600;
+}
+
+.ux-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #111827;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* El efecto UX al hacer clic en un input */
+.ux-input:focus {
+  background-color: #ffffff;
+  border-color: #c61f2b;
+  box-shadow: 0 0 0 4px rgba(198, 31, 43, 0.1);
+}
+
+.ux-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Estilo para campos bloqueados (como el SKU) */
+.ux-input.disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+  border-style: dashed;
+}
+
+.ux-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* --- BOTONES DE ACCIÓN --- */
+.ux-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eaeaea;
+}
+
+.btn-cancelar {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancelar:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.btn-guardar {
+  background: #c61f2b; /* Rojo principal */
+  border: 1px solid #c61f2b;
+  color: #ffffff;
+  padding: 0.7rem 1.8rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px rgba(198, 31, 43, 0.2);
+}
+
+.btn-guardar:hover {
+  background: #a81a24;
+  border-color: #a81a24;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 10px rgba(198, 31, 43, 0.3);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 650px) {
+  .ux-grid, .ux-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  .span-2 {
+    grid-column: 1;
+  }
+  .ux-header, .ux-form {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .ux-form-actions {
+    flex-direction: column-reverse;
+  }
+  .btn-cancelar, .btn-guardar {
+    width: 100%;
+    justify-content: center;
+  }
+}

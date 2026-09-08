@@ -1,0 +1,264 @@
+/* =========================================
+   VARIABLES GLOBALES DEL COMPONENTE
+   ========================================= */
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --overlay-bg: rgba(0, 0, 0, 0.65);
+  --accent-color: #8b0000;
+  --accent-hover: #b30000;
+  --transition-speed: 0.3s;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* =========================================
+   1. LAYOUT PRINCIPAL (ESTRUCTURA)
+   ========================================= */
+.hero-section {
+  position: relative;
+  
+  /* Mantenemos el truco para comerse el marco blanco */
+  margin: -24px; 
+  width: calc(100% + 48px); 
+  
+  /* 🔥 EL CAMBIO CLAVE: Usamos % en lugar de vh 🔥 */
+  /* Así le decimos: "Toma el 100% de tu cajón padre y súmale los 48px de los márgenes negativos" */
+  height: calc(100% + 48px); 
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--text-primary);
+  
+  /* Evitamos cualquier desbordamiento interno */
+  overflow: hidden; 
+  border-radius: 0; 
+}
+
+/* Estilo para la imagen de fondo optimizada */
+.hero-bg-image {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0; 
+  background: var(--overlay-bg);
+  z-index: 1;
+}
+
+.hero-header, 
+.hero-content, 
+.hero-footer {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================
+   2. CABECERA Y NAVEGACIÓN
+   ========================================= */
+.hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+}
+
+.logo-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 2.2rem;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-speed) ease;
+}
+
+.menu-btn:hover {
+  color: var(--accent-hover);
+}
+
+/* =========================================
+   3. CONTENIDO CENTRAL Y BOTONES
+   ========================================= */
+.hero-content {
+  padding: 0 4rem;
+  max-width: 1300px;
+}
+
+.main-title {
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 5px;
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+  text-shadow: 2px 4px 10px rgba(0,0,0,0.8);
+}
+
+.subtitle {
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  font-weight: 300;
+  max-width: 600px;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  text-shadow: 1px 2px 5px rgba(0,0,0,0.9);
+}
+
+.btn-outline-custom {
+  background: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--text-primary);
+  padding: 14px 36px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.btn-outline-custom:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
+}
+
+/* =========================================
+   4. PIE DE PÁGINA E INDICADORES
+   ========================================= */
+.hero-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 2rem 4rem;
+}
+
+.slider-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progress-bar-custom {
+  width: 140px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.progress-fill {
+  /* Elimina la línea de 'width: 20%;' */
+  height: 100%;
+  background: var(--accent-color);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.1s linear;
+  /* Agrega esto para que el relleno sea suave */
+}
+
+.numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.current {
+  font-size: 2.8rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.total {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+}
+
+.social-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.social-icons a {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  transition: all var(--transition-speed) ease;
+  text-decoration: none;
+}
+
+.social-icons a:hover {
+  color: var(--accent-hover);
+  transform: translateY(-3px);
+}
+
+/* =========================================
+   5. RESPONSIVE DESIGN (MÓVILES Y PANTALLAS PEQUEÑAS)
+   ========================================= */
+@media (max-width: 1024px) {
+  .hero-header, 
+  .hero-content, 
+  .hero-footer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-header, 
+  .hero-content, 
+  .hero-footer {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .hero-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 2rem;
+  }
+
+  .hero-section {
+    min-height: calc(100vh - 60px + 24px); 
+  }
+
+  .hero-bg-image {
+    object-position: 60% center; 
+  }
+}
+
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-header,
+.hero-content,
+.hero-footer {
+  position: relative;
+  z-index: 2;
+}

@@ -1,0 +1,251 @@
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: linear-gradient(180deg, #000000, #111111);
+  height: 100vh;
+  border-right: 1px solid #2c2c2c;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+/* Links */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  margin: 4px 10px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #adb5bd;
+  transition: all 0.25s ease;
+}
+
+/* Íconos */
+.nav-link i {
+  font-size: 1.3rem;
+  transition: transform 0.2s ease;
+}
+
+/* Hover */
+.nav-link:hover {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+.nav-link:hover i {
+  transform: scale(1.1);
+}
+
+/* ACTIVO (estilo moderno con barra lateral) */
+.nav-link.active {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: #ff4d4d !important;
+  position: relative;
+}
+
+.navbar-custom {
+  background-color: #000000;
+  /* Sombra suave para dar profundidad sobre el fondo blanco */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Borde inferior más elegante y sutil */
+  border-bottom: 2px solid #5a1219;
+}
+
+/* Línea roja lateral */
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  border-radius: 4px;
+  background-color: #ff0000;
+}
+
+/* --- Contenedor del Perfil --- */
+.user-profile {
+  background-color: #141414;
+  border-radius: 16px;
+  margin: 0 15px 15px 15px;
+  /* Reducimos el espacio de arriba/abajo (de 12px a 6px) para que la caja no crezca */
+  padding: 6px 18px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* --- Imagen del Avatar --- */
+.profile-img {
+  width: 58px;
+  /* Imagen más grande */
+  height: 58px;
+  object-fit: cover;
+}
+/* --- Contenedor de Textos --- */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+/* --- Nombre del Usuario --- */
+.user-name {
+  font-size: 1.05rem;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+/* --- Rol --- */
+.user-role {
+  color: #adb5bd;
+  font-size: 0.85rem;
+}
+
+/* --- Botón logout --- */
+.btn-logout {
+  /* Alineado exactamente con la caja de perfil de arriba */
+  margin: 0 15px 15px 15px;
+  padding: 12px 18px;
+  border-radius: 10px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #adb5bd !important;
+  transition: all 0.25s ease;
+}
+
+/* Hover logout */
+.btn-logout:hover {
+  background-color: #ff0000 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.btn-logout:hover i {
+  color: #fff !important;
+}
+
+/* 1. Overlay limpio (sin blur pesado) */
+.simple-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  /* Fondo sólido, mucho más ligero */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+/* 2. Modal (sin cambios estructurales, solo limpieza) */
+.simple-modal {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.simple-modal h3 {
+  color: #000000;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.simple-modal p {
+  color: #000000;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.simple-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* 3. Botones OPTIMIZADOS */
+.btn-confirm,
+.btn-cancel {
+  min-width: 140px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  /* CAMBIO CLAVE: Animamos solo lo necesario, no 'all' */
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Botón "Continuar" */
+.btn-confirm {
+  background-color: #a50101;
+  color: #ffffff;
+}
+
+.btn-confirm:hover {
+  background-color: #dc0000;
+  border-color: #dc0000;
+}
+
+/* Botón "Cerrar sesión" */
+.btn-cancel {
+  background-color: #292929;
+  color: #ffffff;
+}
+
+.btn-cancel:hover {
+  background-color: #3d3d3d;
+  color: #ffffff;
+}
+
+/* Cuando el body tiene esta clase, TODO el sistema se adapta */
+body.modo-dislexia,
+body.modo-dislexia * {
+  /* Usamos fuentes amigables por defecto */
+  font-family: Arial, Verdana, sans-serif !important;
+  /* Aumentamos espacios para evitar que las letras se peguen */
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.3em !important;
+  line-height: 1.6 !important;
+  /* Forzamos alineación a la izquierda, nada de justificados */
+  text-align: left !important;
+  /* Prohibimos las cursivas */
+  font-style: normal !important;
+}
+
+/* --- Controles de Accesibilidad --- */
+.btn-accesibilidad {
+  background-color: #141414;
+  color: #adb5bd;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+  padding: 10px 0;
+  transition: all 0.25s ease;
+}
+
+/* Hover: Se pone "plomito" solo si el botón está apagado */
+.btn-accesibilidad:not(.activo):hover {
+  background-color: #292929;
+  color: #ffffff;
+}
+
+/* Estados cuando están encendidos */
+.btn-voz-activo {
+  background-color: #FF0000 !important;
+  color: #ffffff !important;
+  border-color: #FF0000 !important;
+}
+
+.btn-filtro-activo {
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+  border-color: #0d6efd !important;
+}

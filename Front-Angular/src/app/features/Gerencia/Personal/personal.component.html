@@ -1,0 +1,183 @@
+<div class="personal-container">
+  <div class="header-section">
+    <div class="header-titles">
+      <h1>Gestion de Usuarios</h1>
+      <p>Control de usuarios por rol y ubicacion</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary" [disabled]="!apiGerenciaDisponible()" (click)="showModal.set(true)">
+        <span class="plus-icon">+</span> Registrar Usuario
+      </button>
+    </div>
+  </div>
+
+  @if (mensaje()) {
+    <div class="page-msg" [class.page-msg-error]="tipoMensaje() === 'error'" [class.page-msg-ok]="tipoMensaje() === 'ok'">
+      {{ mensaje() }}
+    </div>
+  }
+
+  <div class="kpi-grid">
+    @for (kpi of kpis(); track kpi.titulo) {
+      <div class="kpi-card">
+        <div class="kpi-icon-wrapper">
+          <span class="kpi-icon">{{ kpi.icono }}</span>
+        </div>
+        <div class="kpi-info">
+          <span class="kpi-title">{{ kpi.titulo }}</span>
+          <h2 class="kpi-value">{{ kpi.valor }}</h2>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="table-container card-shadow">
+    <div class="table-filters">
+      <div class="search-box">
+        <span class="search-icon">&#128269;</span>
+        <input
+          type="text"
+          placeholder="Buscar por nombre, DNI o usuario"
+          [ngModel]="busqueda()"
+          (ngModelChange)="busqueda.set($event)"
+        />
+      </div>
+
+      <div class="custom-dropdown" (click)="dropdownSedesAbierto = !dropdownSedesAbierto">
+        <div class="dropdown-trigger" [class.active]="dropdownSedesAbierto">
+          <span>{{ getNombreSedeSeleccionada() }}</span>
+          <span class="arrow" [class.open]="dropdownSedesAbierto">▼</span>
+        </div>
+
+        @if (dropdownSedesAbierto) {
+          <ul class="dropdown-list">
+            <li (click)="ubicacionFiltro.set(0)" [class.selected]="ubicacionFiltro() === 0">
+              Todas las sedes
+            </li>
+            @for (ubicacion of ubicaciones(); track ubicacion.id) {
+              <li (click)="ubicacionFiltro.set(ubicacion.id)" [class.selected]="ubicacionFiltro() === ubicacion.id">
+                {{ ubicacion.nombre }}
+              </li>
+            }
+          </ul>
+        }
+      </div>
+      <div class="custom-dropdown" (click)="dropdownEstadoAbierto = !dropdownEstadoAbierto">
+        
+        <div class="dropdown-trigger" [class.active]="dropdownEstadoAbierto">
+          <span>{{ getNombreEstadoSeleccionado() }}</span>
+          <span class="arrow" [class.open]="dropdownEstadoAbierto">▼</span>
+        </div>
+
+        @if (dropdownEstadoAbierto) {
+          <ul class="dropdown-list">
+            <li (click)="estadoFiltro.set('todos')" [class.selected]="estadoFiltro() === 'todos'">
+              Todos
+            </li>
+            <li (click)="estadoFiltro.set('activos')" [class.selected]="estadoFiltro() === 'activos'">
+              Activos
+            </li>
+            <li (click)="estadoFiltro.set('inactivos')" [class.selected]="estadoFiltro() === 'inactivos'">
+              Inactivos
+            </li>
+          </ul>
+        }
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>Ubicacion</th>
+            <th>Estado</th>
+            <th class="text-center">Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (emp of empleadosFiltrados(); track emp.id) {
+            <tr class="table-row">
+              <td class="col-nombre">
+                <div class="avatar-placeholder">{{ emp.nombreCompleto.charAt(0) }}</div>
+                <div class="nombre-info">
+                  <strong>{{ emp.nombreCompleto }}</strong>
+                  <span class="sub-text">{{ emp.usuario || 'Usuario pendiente' }}</span>
+                </div>
+              </td>
+              <td class="dni-text">{{ emp.dni }}</td>
+              <td>
+                <span class="phone-text">{{ emp.telefono || 'Sin teléfono' }}</span>
+              </td>
+              <td>
+                <span class="badge badge-location">
+                  <span class="location-icon">{{ getIconoSede(emp.ubicacion) }}</span> {{ emp.ubicacion }}
+                </span>
+              </td>
+              <td>
+                <span class="badge status-badge" [ngClass]="getEstadoClass(emp.estadoLaboral)">
+                  <span class="status-dot"></span> {{ emp.estadoLaboral ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+              <td class="text-center">
+                <div style="display: flex; gap: 8px; justify-content: center;">
+                  <button
+                    class="btn-secondary"
+                    type="button"
+                    style="padding: 6px 10px; font-size: 12px;"
+                    (click)="abrirModalEditar(emp)"
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    class="btn-secondary"
+                    type="button"
+                    style="padding: 6px 10px; font-size: 12px;"
+                    [disabled]="estaActualizandoEmpleado(emp.id)"
+                    (click)="alternarEstadoEmpleado(emp)"
+                  >
+                    {{ estaActualizandoEmpleado(emp.id) ? 'Guardando...' : (emp.estadoLaboral ? 'Inhabilitar' : 'Habilitar') }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            @if (!cargando()) {
+              <tr>
+                <td colspan="5" class="text-center sub-text" style="padding: 18px;">No se encontraron usuarios.</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <span class="page-info">
+        Mostrando <strong>{{ empleadosFiltrados().length }}</strong> de <strong>{{ empleados().length }}</strong> registros
+      </span>
+    </div>
+  </div>
+</div>
+
+@if (showModal()) {
+  <app-registrar-e
+    [roles]="roles()"
+    [ubicaciones]="ubicaciones()"
+    (onClose)="showModal.set(false)"
+    (onSaved)="onEmpleadoGuardado($event)">
+  </app-registrar-e>
+}
+
+@if (showModalEdit() && empleadoAEditar()) {
+  <app-editar-empl
+    [empleadoOriginal]="empleadoAEditar()"
+    [roles]="roles()"
+    [ubicaciones]="ubicaciones()"
+    (onClose)="showModalEdit.set(false)"
+    (onSaved)="onEmpleadoActualizado($event)">
+  </app-editar-empl>
+}

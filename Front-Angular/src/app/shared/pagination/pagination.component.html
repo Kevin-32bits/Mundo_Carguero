@@ -1,0 +1,19 @@
+<div class="paginacion-contenedor" *ngIf="totalPages > 1">
+  <ul class="paginacion-lista">
+    <li class="paginacion-item" [class.disabled]="currentPage === 1">
+      <button type="button" (click)="goFirst()"><i class="fas fa-angle-double-left"></i></button>
+    </li>
+    <li class="paginacion-item" [class.disabled]="currentPage === 1">
+      <button type="button" (click)="goPrev()"><i class="fas fa-angle-left"></i></button>
+    </li>
+    <li class="paginacion-item activo">
+      <button type="button">{{ currentPage }}</button>
+    </li>
+    <li class="paginacion-item" [class.disabled]="currentPage === totalPages">
+      <button type="button" (click)="goNext()"><i class="fas fa-angle-right"></i></button>
+    </li>
+    <li class="paginacion-item" [class.disabled]="currentPage === totalPages">
+      <button type="button" (click)="goLast()"><i class="fas fa-angle-double-right"></i></button>
+    </li>
+  </ul>
+</div>

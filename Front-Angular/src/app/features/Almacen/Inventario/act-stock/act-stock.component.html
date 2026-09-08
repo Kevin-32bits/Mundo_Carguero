@@ -1,0 +1,53 @@
+<div class="stock-overlay" *ngIf="producto" (click)="cerrarModal()">
+  <section class="stock-modal" (click)="$event.stopPropagation()">
+    
+    <header class="ux-header">
+      <div class="ux-header-content">
+        <h3 class="ux-title">Ingresar Stock</h3>
+        <p class="ux-subtitle">SKU: <strong>{{ producto.sku }}</strong></p>
+      </div>
+      <button type="button" class="ux-btn-close" title="Cerrar" (click)="cerrarModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </header>
+
+    <form class="ux-form" (ngSubmit)="confirmarIngreso()">
+      
+      <div class="producto-contexto">
+        <span class="producto-nombre">{{ producto.nombre }}</span>
+        <div class="stock-actual-badge">
+          <i class="fas fa-box"></i> Stock actual: <strong>{{ producto.stockCajas }} cajas</strong>
+        </div>
+      </div>
+
+      <div *ngIf="mensaje()" class="alerta-mensaje" [ngClass]="{'alerta-ok': tipoMensaje() === 'ok', 'alerta-error': tipoMensaje() === 'error'}">
+        {{ mensaje() }}
+      </div>
+
+      <div class="ux-input-group mt-2">
+        <label for="cantidadStock">Cantidad a Ingresar (Cajas)</label>
+        <div class="input-numerico-wrapper" [class.disabled-wrapper]="guardando()">
+          <button type="button" class="btn-restar" (click)="restarCantidad()" [disabled]="guardando() || cantidadIngreso <= 1">
+            <i class="fas fa-minus"></i>
+          </button>
+          
+          <input type="number" id="cantidadStock" name="cantidad" class="ux-input input-grande" 
+                 [(ngModel)]="cantidadIngreso" min="1" [disabled]="guardando()" />
+                 
+          <button type="button" class="btn-sumar" (click)="sumarCantidad()" [disabled]="guardando()">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="ux-form-actions">
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()" [disabled]="guardando()">Cancelar</button>
+        <button type="submit" class="btn-confirmar" [disabled]="guardando() || cantidadIngreso < 1">
+          <i class="fas" [ngClass]="guardando() ? 'fa-spinner fa-spin' : 'fa-check'"></i> 
+          {{ guardando() ? 'Guardando...' : 'Confirmar Ingreso' }}
+        </button>
+      </div>
+
+    </form>
+  </section>
+</div>

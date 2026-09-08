@@ -1,0 +1,223 @@
+/* Fondo oscuro translúcido */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* 1. Contenedor principal: Más ancho para aprovechar los lados */
+.modal-container {
+  background: white;
+  width: 95%;
+  max-width: 760px;
+  /* Aumentado para usar los lados */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: slideIn 0.25s ease-out;
+  will-change: transform;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 2. Header: Menos padding vertical para ganar espacio */
+.modal-header {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #111;
+  font-weight: 700;
+}
+
+.modal-header p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #777;
+}
+
+.btn-close-top {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-close-top:hover {
+  color: #ba1222;
+}
+
+/* 3. Body: Menos padding vertical */
+.modal-body {
+  padding: 20px 24px;
+}
+
+.status-msg {
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+}
+
+.status-msg.ok {
+  background: #e8f7ed;
+  color: #126a34;
+}
+
+.status-msg.error {
+  background: #fdecec;
+  color: #9e1c22;
+}
+
+/* 4. Grid: Separado a los lados, más compacto hacia abajo */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 28px;
+  row-gap: 14px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* --- Estilos de Formulario Mejorados --- */
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 2px;
+}
+
+/* 5. Inputs ligeramente más compactos */
+.form-group input,
+.form-group select {
+  padding: 9px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #ba1222;
+  box-shadow: 0 0 0 4px rgba(186, 18, 34, 0.12);
+}
+
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+/* --- Estilos del Checkbox de Contraseña --- */
+.checkbox-container {
+  margin-top: -8px;
+}
+
+.checkbox-label {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500 !important;
+  color: #666 !important;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #ba1222;
+}
+
+/* 6. Footer y Botones: Menos padding vertical, ajustado a los lados */
+.modal-footer {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.btn-cancelar {
+  background: #f1f1f1;
+  color: #555;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+  background: #e4e4e4;
+  color: #333;
+}
+
+.btn-guardar {
+  background: #ba1222;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(186, 18, 34, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-guardar:hover:not(:disabled) {
+  background: #9a0f1c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(186, 18, 34, 0.35);
+}
+
+.btn-guardar:disabled {
+  background: #e57e88;
+  cursor: not-allowed;
+  box-shadow: none;
+}

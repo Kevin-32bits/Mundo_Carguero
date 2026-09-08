@@ -1,0 +1,182 @@
+<div class="container-fluid pt-0 pb-4 px-3 px-md-4 h-100">
+  <div class="mt-0 mb-2">
+    <h2 class="fw-bold text-dark mb-0">Punto de Venta {{ esVentaPorUnidad() ? 'Minorista' : 'Mayorista' }}</h2>
+    <p class="text-muted small mb-0">Venta exclusiva por {{ esVentaPorUnidad() ? 'unidades sueltas' : 'cajas cerradas' }}</p>
+  </div>
+
+  <div class="row mb-3 g-2">
+    <div class="col-md-8">
+      <div class="input-group shadow-sm h-100">
+        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0"
+          placeholder="Buscar repuesto por nombre o categoria..."
+          [ngModel]="busquedaGeneral()"
+          (ngModelChange)="busquedaGeneral.set($event); paginaActual.set(1)"
+        />
+      </div>
+    </div>
+    <div class="col-md-4">
+      <select 
+        class="form-select shadow-sm h-100" 
+        [ngModel]="categoriaSeleccionada()"
+        (ngModelChange)="categoriaSeleccionada.set($event); paginaActual.set(1)">
+        @for (cat of categorias(); track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="row g-3 contenedor-principal">
+    
+    <div class="col-xl-9 col-lg-8 d-flex flex-column h-100">
+      <div class="flex-grow-1 overflow-auto d-flex flex-column border rounded-3 bg-white">
+        
+        <div class="row mx-0 bg-light py-3 border-bottom position-sticky top-0 shadow-sm small fw-bold text-muted text-uppercase" style="z-index: 1;">
+          <div class="col-5 ps-4">Producto (Empaque)</div>
+          <div class="col-2">Categoría</div>
+          <div class="col-2">Precio {{ esVentaPorUnidad() ? 'Unidad' : 'Caja' }}</div>
+          <div class="col-2">Stock {{ esVentaPorUnidad() ? 'Unidades' : 'Cajas' }}</div>
+          <div class="col-1 text-center pe-4">Acción</div>
+        </div>
+
+        <div class="d-flex flex-column">
+          @if (cargando()) {
+            <div class="text-center py-5 text-muted">Cargando catálogo de productos...</div>
+          } @else if (productosFiltrados().length === 0) {
+            <div class="text-center py-5 text-muted">No hay productos para mostrar.</div>
+          } @else {
+            @for (prod of productosPaginados(); track prod.productoId) {
+              
+              <div class="row mx-0 align-items-center py-2 border-bottom hover-fila">
+                
+                <div class="col-5 ps-4">
+                  <div class="fw-bold text-secondary text-truncate" title="{{ prod.nombre }}">
+                    {{ prod.nombre }}
+                  </div>
+                  <div class="text-muted small">
+                    <i class="bi bi-box-seam me-1"></i> Caja x {{ prod.undsPorCaja }} unds | SKU: {{ prod.id }}
+                  </div>
+                </div>
+                
+                <div class="col-2 text-truncate">
+                  <span class="text-muted small">{{ prod.categoria }}</span>
+                </div>
+                
+                <div class="col-2 fw-bold text-dark">
+                  S/ {{ prod.precioProductos | number:'1.2-2' }}
+                </div>
+                
+                <div class="col-2">
+                  <span class="badge" [ngClass]="prod.stockProductos > 0 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'">
+                    <i class="bi" [ngClass]="prod.stockProductos > 0 ? 'bi-check-circle-fill' : 'bi-x-circle-fill'"></i>
+                    {{ prod.stockProductos > 0 ? prod.stockProductos + (esVentaPorUnidad() ? ' unds' : ' cajas') : 'Agotado' }}
+                  </span>
+                </div>
+                
+                <div class="col-1 text-center pe-4">
+                  <button
+                    class="btn btn-sm fw-bold w-100 shadow-sm"
+                    [ngClass]="prod.stockProductos > 0 ? 'btn-tema-rojo text-white' : 'btn-light text-muted border'"
+                    [disabled]="prod.stockProductos === 0"
+                    (click)="agregarAlCarrito(prod)"
+                    title="Agregar {{ esVentaPorUnidad() ? 'Unidad' : 'Caja' }} al Carrito"
+                  >
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                </div>
+
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      @if (!cargando() && totalPaginas() > 1) {
+        <app-pagination
+          class="mt-2 mb-1 d-block"
+          [currentPage]="paginaActual()"
+          [totalPages]="totalPaginas()"
+          (pageChange)="paginaActual.set($event)"
+        ></app-pagination>
+      }
+    </div>
+
+    <div class="col-xl-3 col-lg-4 h-100">
+      <div class="card border-0 shadow-sm rounded-3 d-flex flex-column h-100">
+        <div class="card-header bg-dark text-white p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold"><i class="bi bi-cart3 me-2"></i>Carrito {{ esVentaPorUnidad() ? 'Minorista' : 'Mayorista' }}</h6>
+            <span class="badge bg-danger rounded-pill px-2">{{ carrito().length }}</span>
+          </div>
+        </div>
+
+        <div class="card-body p-0 flex-grow-1 overflow-auto">
+          @if (carrito().length === 0) {
+            <div class="text-center text-muted p-4 mt-5">
+              <i class="bi bi-box-seam fs-1 opacity-25"></i>
+              <p class="mt-2 small">Agrega {{ esVentaPorUnidad() ? 'unidades' : 'cajas' }} al carrito para cotizar</p>
+            </div>
+          }
+
+          <ul class="list-group list-group-flush">
+            @for (item of carrito(); track item.productoId; let i = $index) {
+              <li class="list-group-item p-3 hover-fila">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <span class="fw-bold text-dark small lh-sm pe-2">{{ item.nombre }}</span>
+                  <button class="btn btn-link text-danger p-0 border-0" (click)="quitarDelCarrito(item, i)" title="Quitar">
+                    <i class="bi bi-x-circle-fill fs-6"></i>
+                  </button>
+                </div>
+                
+                <div class="text-muted mb-2" style="font-size: 0.75rem;">
+                  {{ esVentaPorUnidad() ? '(Venta por unidad)' : '(Caja de ' + item.undsPorCaja + ' unds)' }}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center bg-light border rounded px-2 py-1 mt-2">
+                  <div class="d-flex align-items-center">
+                    <input
+                      type="number"
+                      class="form-control form-control-sm text-center fw-bold text-primary border-secondary-subtle"
+                      style="width: 65px;"
+                      [ngModel]="item.cantidadProductos"
+                      (ngModelChange)="cambiarCantidadCarrito(i, $event)"
+                      min="1"
+                    />
+                    <span class="text-muted small ms-2 text-nowrap">x S/ {{ item.precioProductos | number:'1.2-2' }}</span>
+                  </div>
+                  <span class="fw-bold text-dark">S/ {{ (item.cantidadProductos * item.precioProductos) | number:'1.2-2' }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="card-footer bg-light p-3 border-top total-footer">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small fw-bold">TOTAL COTIZACIÓN</span>
+            <span class="fw-bold text-danger fs-4">S/ {{ totalVenta() | number:'1.2-2' }}</span>
+          </div>
+          <button
+            class="btn btn-tema-rojo text-white w-100 py-2 fw-bold rounded-3 shadow-sm"
+            [disabled]="carrito().length === 0"
+            (click)="abrirModalFacturar()"
+          >
+            COTIZAR VENTA <i class="bi bi-receipt ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (mostrarModalCliente()) {
+  <app-facturar-v 
+    [carrito]="carrito()" 
+    [totalVenta]="totalVenta()"
+    (cerrar)="mostrarModalCliente.set(false)"
+    (facturacionExitosa)="onFacturacionExitosa()">
+  </app-facturar-v>
+}

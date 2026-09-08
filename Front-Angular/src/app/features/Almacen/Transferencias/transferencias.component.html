@@ -1,0 +1,346 @@
+﻿<div class="panel-contenido"> 
+    <h2 class="fw-bold mb-4 page-title">Gestion de Transferencias de Mercancia</h2>
+
+    <div class="d-flex flex-wrap gap-3 mb-4">
+      <div
+        class="card shadow-sm border-0 stat-card"
+        [ngClass]="{ 'border-warning border-2 border-active': estadoVista() === 'Pendiente' }"
+        (click)="cambiarVista('Pendiente')"
+      >
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1 fw-bold text-dark">Pendientes</h6>
+            <small class="text-secondary">{{ pendientes().length }} transferencias por confirmar</small>
+          </div>
+          <div class="bg-warning bg-opacity-25 p-2 rounded-circle">
+            <i class="bi bi-clock-history text-warning"></i>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="card shadow-sm border-0 stat-card"
+        [ngClass]="{ 'border-success border-2 border-active': estadoVista() === 'Recibido' }"
+        (click)="cambiarVista('Recibido')"
+      >
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1 fw-bold text-dark">Recibidos</h6>
+            <small class="text-secondary">{{ recibidos().length }} transferencias confirmadas</small>
+          </div>
+          <div class="bg-success bg-opacity-25 p-2 rounded-circle">
+            <i class="bi bi-check2-circle text-success"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <div class="input-group search-main-group">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+            <input
+              type="text"
+              class="form-control border-start-0"
+              placeholder="Buscar"
+              [ngModel]="filtro()"
+              (ngModelChange)="filtro.set($event)"
+            />
+          </div>
+
+          <button class="btn btn-transfer ms-auto" (click)="abrirModalCrear()">+ Hacer transferencia</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Fecha de Creacion</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Items</th>
+                <th>Solicito</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let trf of transferenciasFiltradas()">
+                <td><span class="text-muted">{{ trf.id }}</span></td>
+                <td>{{ trf.fecha }}</td>
+                <td><i class="bi bi-shop me-1"></i> {{ trf.origen }}</td>
+                <td><i class="bi bi-tools me-1"></i> {{ trf.destino }}</td>
+                <td><span class="fw-bold">{{ trf.items }}</span></td>
+                <td><i class="bi bi-person-circle text-secondary me-1"></i> {{ trf.solicitadoPor || trf.responsable }}</td>
+                <td>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="trf.estado === 'Pendiente' ? 'bg-warning text-dark' : 'bg-success'"
+                  >
+                    {{ trf.estado }}
+                  </span>
+                </td>
+                <td>
+                  <button class="btn btn-link text-dark text-decoration-none p-0 d-flex align-items-center" (click)="abrirDetalle(trf)">
+                    <i class="bi bi-eye me-1"></i> Ver
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p *ngIf="!cargando() && transferenciasFiltradas().length === 0" class="text-center text-muted mb-0">
+          No hay transferencias para mostrar.
+        </p>
+        <p *ngIf="cargando()" class="text-center text-muted mb-0">Cargando transferencias...</p>
+        <p *ngIf="error()" class="error-inline mb-0 mt-2">{{ error() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-modal-overlay" *ngIf="modalAbierto()">
+    <div class="custom-modal dark-theme wide-modal">
+      <div class="modal-header-dark">
+        <h5 class="m-0 fw-bold modal-title-main">Nueva Transferencia</h5>
+        <button class="btn-close-dark" (click)="cerrarModalCrear()">X</button>
+      </div>
+      <p class="text-muted-dark mb-4">Origen: Almacen | Destino habilitado: Sucursal 1</p>
+
+      <h6 class="fw-bold">1: Detalles Basicos</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label text-uppercase small">Origen</label>
+          <input type="text" class="form-control dark-input" value="Almacen" readonly />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label text-uppercase small">Destino</label>
+          <select class="form-select dark-input text-white fw-bold" [ngModel]="sucursalDestinoId()" (ngModelChange)="sucursalDestinoId.set(+$event)">
+            <option [value]="2">Sucursal 1</option>
+            <option [value]="3">Sucursal 2</option>
+          </select>
+        </div>
+      </div>
+
+      <h6 class="fw-bold">2: Seleccion de Productos (Solo Caja)</h6>
+      <div class="d-flex gap-2 mb-2 search-compact">
+        <div class="input-group">
+          <span class="input-group-text dark-input border-end-0">
+            <i class="bi bi-search text-muted-dark"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control dark-input border-start-0 ps-0"
+            placeholder="Buscar por SKU o nombre del producto..."
+            [ngModel]="catalogoBusqueda()"
+            (ngModelChange)="catalogoBusqueda.set($event)"
+          />
+        </div>
+        <button class="btn btn-outline-light px-3 search-btn" (click)="buscarCatalogo()">Buscar</button>
+      </div>
+
+      <div class="search-results-list mb-3" *ngIf="catalogoBusqueda().trim().length > 0 || resultadosCatalogo().length > 0">
+        <button class="result-item" type="button" *ngFor="let p of resultadosCatalogo()" (click)="agregarProducto(p)">
+          <div class="left">
+            <span class="sku">{{ p.sku }}</span>
+            <span class="name">{{ p.nombre }}</span>
+            <span class="meta">Caja x {{ p.unidadesPorCaja }} unds | Precio: {{ formatearMoneda(extraerCostoProducto(p)) }}</span>
+          </div>
+          <span class="add-pill">Anadir</span>
+        </button>
+        <p class="text-muted-dark text-center py-2 mb-0" *ngIf="!buscandoCatalogo() && resultadosCatalogo().length === 0">Sin resultados.</p>
+        <p class="text-muted-dark text-center py-2 mb-0" *ngIf="buscandoCatalogo()">Buscando productos...</p>
+      </div>
+
+      <div class="table-responsive mb-2">
+        <table class="table dark-table align-middle">
+          <thead>
+            <tr>
+              <th class="text-uppercase small border-0">Cajas</th>
+              <th class="text-uppercase small border-0">SKU</th>
+              <th class="text-uppercase small border-0">Descripcion</th>
+              <th class="text-uppercase small border-0">Stock</th>
+              <th class="text-uppercase small border-0">Precio Caja</th>
+              <th class="text-uppercase small border-0">Subtotal</th>
+              <th class="text-uppercase small border-0 text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of productosSeleccionados()">
+              <td class="border-0">
+                <input
+                  type="number"
+                  min="1"
+                  class="form-control dark-input text-center table-qty"
+                  [ngModel]="item.cajas"
+                  (ngModelChange)="actualizarCajas(item.productoId, +$event)"
+                />
+              </td>
+              <td class="border-0">{{ item.sku }}</td>
+              <td class="border-0">{{ item.descripcion }}</td>
+              <td class="border-0">
+                <span class="stock-badge" [ngClass]="estadoStockItem(item)">
+                  {{ textoStockItem(item) }}
+                </span>
+              </td>
+              <td class="border-0">{{ formatearMoneda(item.costoCaja) }}</td>
+              <td class="border-0 fw-bold">{{ formatearMoneda(obtenerSubTotal(item)) }}</td>
+              <td class="border-0 text-center">
+                <button class="btn btn-link text-danger p-0" title="Eliminar" (click)="quitarProducto(item.productoId)">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="productosSeleccionados().length === 0">
+              <td colspan="7" class="border-0 text-center text-muted-dark py-3">Aun no agregaste productos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h6 class="fw-bold mt-3 mb-2">3: Revision y Envio</h6>
+      
+      <div class="mb-3">
+        <label class="form-label text-uppercase small text-muted-dark">Empleado a cargo de la transferencia</label>
+        <div class="input-group">
+          <span class="input-group-text dark-input border-end-0"><i class="bi bi-person-badge-fill text-muted-dark"></i></span>
+          <input type="text" class="form-control dark-input border-start-0 text-white fw-bold" [value]="nombreResponsable()" readonly />
+        </div>
+      </div>
+
+      <p *ngIf="error()" class="error-inline mb-2">{{ error() }}</p>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-outline-light px-4" (click)="cerrarModalCrear()">Cancelar</button>
+        <button class="btn btn-dark-action px-4" [disabled]="enviando() || productosSeleccionados().length === 0" (click)="confirmarTransferencia()">
+          {{ enviando() ? 'Confirmando...' : 'Confirmar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-modal-overlay" *ngIf="modalDetalleAbierto()">
+    <div class="custom-modal dark-theme detail-modal design-ver-modal">
+      
+      <div class="modal-header-dark">
+        <div>
+          <h5 class="m-0 fw-bold text-white">Detalle de Transferencia</h5>
+          <p class="text-muted-dark mb-0">Informacion completa de la operacion</p>
+        </div>
+        <button class="btn-close-dark" (click)="cerrarDetalle()">X</button>
+      </div>
+
+      <h6 class="section-title mt-4 mb-3">1. Detalles Basicos</h6>
+      <div class="info-grid mb-4">
+        <div class="info-card">
+          <span class="info-label">Origen</span>
+          <span class="info-value"><i class="bi bi-shop me-2 text-muted-dark"></i>{{ detalleOrigen() }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">Destino</span>
+          <span class="info-value"><i class="bi bi-tools me-2 text-muted-dark"></i>{{ detalleDestino() }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">Estado</span>
+          <div>
+            <span class="badge-custom mt-1" [ngClass]="detalleEstado() === 'Pendiente' ? 'badge-warning' : 'badge-success'">
+              {{ detalleEstado() }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="section-title mb-3">2. Productos Transferidos</h6>
+      <div class="table-responsive mb-4 rounded-table-container">
+        <table class="table dark-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="text-uppercase small">Cajas</th>
+              <th class="text-uppercase small">SKU</th>
+              <th class="text-uppercase small">Descripcion</th>
+              <th class="text-uppercase small">Stock</th>
+              <th class="text-uppercase small">Precio Caja</th>
+              <th class="text-uppercase small">Subtotal</th>
+              <th class="text-uppercase small text-center" *ngIf="detalleEstado() === 'Pendiente'">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of detalleItems(); let i = index">
+              <td><span class="fw-bold text-white">{{ item.cajas }}</span></td>
+              <td><span class="sku-text">{{ item.sku }}</span></td>
+              <td>{{ item.descripcion }}</td>
+              <td>
+                <span class="stock-badge" [ngClass]="estadoStockItem(item)">
+                  {{ textoStockItem(item) }}
+                </span>
+              </td>
+              <td>{{ formatearMoneda(extraerCostoProducto(item)) }}</td>
+              <td class="fw-bold text-white">{{ formatearMoneda(obtenerSubTotalDetalle(item)) }}</td>
+              <td class="text-center" *ngIf="detalleEstado() === 'Pendiente'">
+                <button
+                  class="btn btn-link text-danger p-0"
+                  title="Eliminar"
+                  [disabled]="estaEliminandoDetalleItem(item) || confirmandoDetalle() || anulandoDetalle()"
+                  (click)="eliminarItemDesdeDetalle(item, i)"
+                >
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!detalleCargando() && detalleItems().length === 0">
+              <td [attr.colspan]="detalleEstado() === 'Pendiente' ? 7 : 6" class="text-center text-muted-dark py-4">
+                Sin productos asociados a esta transferencia.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h6 class="section-title mb-3">3. Responsables</h6>
+      <div class="info-grid mb-4">
+        <div class="info-card">
+          <span class="info-label">Solicito</span>
+          <span class="info-value"><i class="bi bi-person-circle me-2 text-muted-dark"></i>{{ detalleSolicitadoPor() }}</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">Autorizo</span>
+          <span class="info-value"><i class="bi bi-person-check me-2 text-muted-dark"></i>{{ detalleAutorizadoPor() }}</span>
+        </div>
+      </div>
+
+      <div class="mb-4" *ngIf="detalleEstado() === 'Pendiente'">
+        <label class="form-label text-uppercase small text-muted-dark">Empleado de almacen que aprueba</label>
+        <div class="input-group">
+          <span class="input-group-text dark-input border-end-0"><i class="bi bi-person-badge-fill text-muted-dark"></i></span>
+          <input type="text" class="form-control dark-input border-start-0 text-white fw-bold" [value]="nombreResponsable()" readonly />
+        </div>
+      </div>
+
+      <p *ngIf="detalleCargando()" class="text-muted-dark text-center mb-2">Cargando detalle...</p>
+      <p *ngIf="error()" class="error-inline mb-2">{{ error() }}</p>
+
+      <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top-dark">
+        <button class="btn btn-outline-light px-4" *ngIf="detalleEstado() === 'Pendiente'" (click)="cerrarDetalle()">Cancelar</button>
+        <button class="btn btn-dark-action px-4" *ngIf="detalleEstado() !== 'Pendiente'" (click)="cerrarDetalle()">Cerrar Vista</button>
+        <button
+          class="btn btn-anular px-4"
+          *ngIf="detalleEstado() === 'Pendiente'"
+          [disabled]="confirmandoDetalle() || anulandoDetalle()"
+          (click)="anularReposicionDesdeDetalle()"
+        >
+          {{ anulandoDetalle() ? 'Anulando...' : 'Anular Reposicion' }}
+        </button>
+        
+        <button
+          class="btn btn-confirm-action px-4"
+          *ngIf="detalleEstado() === 'Pendiente'"
+          [disabled]="confirmandoDetalle() || anulandoDetalle() || detalleItems().length === 0"
+          (click)="confirmarDesdeDetalle()"
+        >
+          {{ confirmandoDetalle() ? 'Confirmando...' : 'Confirmar Envio' }}
+        </button>
+      </div>
+    </div>
+  </div>

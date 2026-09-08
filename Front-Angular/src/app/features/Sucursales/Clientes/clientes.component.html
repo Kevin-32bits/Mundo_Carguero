@@ -1,0 +1,157 @@
+<div class="container-fluid pt-0 pb-4 px-3 px-md-4 h-100">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mt-0 mb-4 gap-3">
+    <div>
+      <h2 class="fw-bold texto-rojo-oscuro mb-0">Directorio de Clientes</h2>
+      <p class="text-muted small mb-0">Gestiona la informacion de tus compradores.</p>
+    </div>
+
+    <button class="btn btn-tema-rojo text-white fw-bold px-4 py-2 shadow-sm rounded-3" (click)="abrirModalNuevoCliente()">
+      <i class="bi bi-person-plus-fill me-2"></i> Nuevo Cliente
+    </button>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="input-group shadow-sm">
+        <span class="input-group-text bg-white border-end-0 text-muted py-2"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0 py-2"
+          placeholder="Buscar por DNI o RUC..."
+          [ngModel]="busqueda()"
+          (ngModelChange)="busqueda.set($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-0">
+      <div class="table-responsive panel-scroll">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light position-sticky top-0 shadow-sm" style="z-index: 1;">
+            <tr>
+              <th style="width: 35%;" class="ps-4">Cliente / Empresa</th>
+              <th style="width: 25%;">Contacto</th>
+              <th style="width: 25%;">Direccion</th>
+              <th style="width: 15%;" class="text-center pe-4">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (cargando()) {
+              <tr>
+                <td colspan="4" class="ps-4 py-4 text-center text-muted">Cargando clientes...</td>
+              </tr>
+            } @else if (clientesFiltrados().length === 0) {
+              <tr>
+                <td colspan="4" class="ps-4 py-4 text-center text-muted">No hay clientes para mostrar.</td>
+              </tr>
+            } @else {
+              @for (cliente of clientesFiltrados(); track cliente.clienteId) {
+                <tr>
+                  <td class="ps-4">
+                    <div class="fw-bold texto-rojo-oscuro mb-1" style="font-size: 1.05rem;">{{ cliente.nombre }}</div>
+                    <div class="text-muted small"><i class="bi bi-card-heading me-1"></i> {{ getDocumentoCliente(cliente) }}</div>
+                  </td>
+
+                  <td>
+                    <div class="text-secondary small mb-1"><i class="bi bi-telephone-fill me-2"></i> {{ cliente.telefono || '-' }}</div>
+                    <div class="text-muted small"><i class="bi bi-envelope-fill me-2"></i> {{ cliente.correo || '-' }}</div>
+                  </td>
+
+                  <td>
+                    <div class="text-muted small"><i class="bi bi-geo-alt-fill me-2 text-secondary"></i> {{ cliente.direccion || '-' }}</div>
+                  </td>
+
+                  <td class="text-center pe-4">
+                    <div class="btn-group shadow-sm">
+                      <button class="btn btn-sm btn-light border text-primary" title="Editar Cliente" (click)="abrirModalEditarCliente(cliente)">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button class="btn btn-sm btn-light border text-danger" title="Eliminar" (click)="eliminarCliente(cliente)">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (mostrarModal()) {
+  <div class="cliente-modal-overlay" (click)="cerrarModal()">
+    <div class="cliente-modal" (click)="$event.stopPropagation()">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h4 class="fw-bold mb-1">{{ clienteEditandoId() ? 'Editar Cliente' : 'Nuevo Cliente' }}</h4>
+          <p class="text-muted mb-0">Registra un cliente para usarlo en cotizaciones</p>
+        </div>
+        <button class="btn-close" type="button" (click)="cerrarModal()"></button>
+      </div>
+
+      @if (mensaje()) {
+        <div class="alert py-2" [ngClass]="tipoMensaje() === 'error' ? 'alert-danger' : 'alert-success'">
+          {{ mensaje() }}
+        </div>
+      }
+
+      <div class="row g-2 mb-2">
+        <div class="col-md-4">
+          <label class="form-label small fw-bold">Tipo Doc.</label>
+          <select class="form-select" [(ngModel)]="form.tipoDocumento" (change)="alCambiarTipoDoc()">
+            <option value="DNI">DNI</option>
+            <option value="RUC">RUC</option>
+          </select>
+        </div>
+        <div class="col-md-8">
+          <label class="form-label small fw-bold">Numero Documento</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="form.numeroDocumento" 
+            (input)="limpiarNumeroDocumento($event)"
+            [maxlength]="form.tipoDocumento === 'DNI' ? 8 : 11"
+          />
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="form-label small fw-bold">
+          {{ form.tipoDocumento === 'RUC' ? 'Razón Social' : 'Nombre del Cliente' }}
+        </label>
+        <input type="text" class="form-control" [(ngModel)]="form.nombre" />
+      </div>
+
+      <div class="row g-2 mb-2">
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Telefono</label>
+          <input type="text" class="form-control" [(ngModel)]="form.telefono" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label small fw-bold">Correo</label>
+          <input type="email" class="form-control" [(ngModel)]="form.correo" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small fw-bold">Direccion</label>
+        <input type="text" class="form-control" [(ngModel)]="form.direccion" />
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal()" [disabled]="guardando()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-tema-rojo text-white" (click)="guardarCliente()" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : (clienteEditandoId() ? 'Actualizar Cliente' : 'Guardar Cliente') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

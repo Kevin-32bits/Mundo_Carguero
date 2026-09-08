@@ -1,0 +1,116 @@
+<div class="panel-contenido">
+  <section class="cabecera-seccion">
+    <div class="cabecera-titulos">
+      <h2 class="titulo-pagina">Inventario de Productos</h2>
+    </div>
+
+    <div class="controles-filtro">
+      <div class="control-busqueda">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Buscar por SKU o nombre" [(ngModel)]="terminoBusqueda" (input)="onBuscar()" />
+      </div>
+
+      <div class="filtros-categoria">
+        <span class="label-filtro">Filtrar por categoria:</span>
+        <div class="tags-filtro">
+          <button
+            *ngFor="let filtro of filtrosCategoria()"
+            [class.activo]="filtroSeleccionado === filtro"
+            (click)="seleccionarFiltro(filtro)"
+          >
+            {{ filtro }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div *ngIf="cargando()" class="estado-vista">
+    <h3>Cargando inventario desde API...</h3>
+  </div>
+
+  <div *ngIf="errorCarga()" class="estado-vista error">
+    <h3>{{ errorCarga() }}</h3>
+  </div>
+
+  <div class="listado-secciones" *ngIf="!cargando() && !errorCarga() && productosFiltrados().length > 0; else sinResultados">
+    <section class="seccion-categoria">
+      <div class="tabla-contenedor">
+        <table class="tabla-inventario">
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Nombre del Producto</th>
+              <th>Und/Caja</th>
+              <th>Precio Venta (S/)</th>
+              <th>Stock Actual</th>
+              <th class="col-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of obtenerProductosPaginados()">
+              <td>
+                <span class="sku-badge">{{ producto.sku }}</span>
+              </td>
+              <td class="nombre-producto">{{ producto.nombre }}</td>
+              <td>{{ producto.unidadesPorCaja }}</td>
+              <td class="precio">S/ {{ producto.precioVentaCaja | number:'1.2-2' }}</td>
+              <td>
+                <span class="stock-badge" [ngClass]="producto.estadoStock">
+                  {{ producto.stockActualCajas }} cajas ({{ obtenerTextoStock(producto.estadoStock) }})
+                </span>
+              </td>
+                <td class="col-acciones">
+                  <div class="acciones-fila">
+                    <button class="btn-accion btn-ver" (click)="abrirDetalleProducto(producto)" title="Ver detalles">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    
+                    <button class="btn-accion btn-editar" (click)="abrirEditarProducto(producto)" title="Editar producto">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    
+                    <button class="btn-accion btn-stock" (click)="abrirActStock(producto)" title="Añadir stock">
+                      <i class="fas fa-box"></i> 
+                    </button>
+                  </div>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination
+        *ngIf="obtenerTotalPaginas() > 1"
+        [currentPage]="paginaActual()"
+        [totalPages]="obtenerTotalPaginas()"
+        (pageChange)="cambiarPagina($event)"
+      ></app-pagination>
+    </section>
+  </div>
+
+  <ng-template #sinResultados>
+    <div class="estado-vista" *ngIf="!cargando() && !errorCarga()">
+      <h3>No se encontraron productos con ese filtro.</h3>
+    </div>
+  </ng-template>
+</div>
+
+<app-ver-detalle
+  [producto]="productoEnVista()"
+  (cerrar)="cerrarDetalleProducto()"
+></app-ver-detalle>
+
+<app-editar-product
+  *ngIf="productoAEditar()"
+  [producto]="productoAEditar()"
+  (cerrar)="cerrarEditarProducto()"
+  (productoActualizado)="onStockActualizado()"
+></app-editar-product>
+
+<app-act-stock
+  *ngIf="productoAStock()"
+  [producto]="productoAStock()"
+  (cerrar)="cerrarActStock()"
+  (stockActualizado)="onStockActualizado()" 
+></app-act-stock>

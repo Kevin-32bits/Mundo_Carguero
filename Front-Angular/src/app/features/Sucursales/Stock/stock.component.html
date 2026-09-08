@@ -1,0 +1,182 @@
+<div class="container-fluid pt-0 pb-4 px-3 px-md-4 h-100">
+  <div class="mb-4 mt-0 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+    <div>
+      <h2 class="fw-bold texto-rojo-oscuro mb-0">Control de Stock y Reposicion</h2>
+      <p class="text-muted small mb-0">Revisa tu inventario y solicita cajas al almacen central</p>
+    </div>
+  </div>
+
+  <div class="row mb-3 g-2">
+    <div class="col-md-8">
+      <div class="input-group shadow-sm h-100">
+        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0"
+          placeholder="Buscar por SKU O Nombre..."
+          [ngModel]="busquedaGeneral()"
+          (ngModelChange)="busquedaGeneral.set($event); paginaActual.set(1)"
+        />
+      </div>
+    </div>
+    <div class="col-md-4">
+      <select 
+        class="form-select shadow-sm h-100" 
+        [ngModel]="categoriaSeleccionada()"
+        (ngModelChange)="categoriaSeleccionada.set($event); paginaActual.set(1)"
+      >
+        @for (cat of categorias(); track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="row g-3 contenedor-principal">
+    
+    <div class="col-xl-8 col-lg-7 d-flex flex-column h-100">
+      <div class="card border-0 shadow-sm rounded-3 flex-grow-1 d-flex flex-column" style="min-height: 0;">
+        <div class="card-body p-0 d-flex flex-column h-100">
+          
+          <div class="table-responsive flex-grow-1 overflow-auto">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light position-sticky top-0 shadow-sm" style="z-index: 1">
+                <tr>
+                  <th class="ps-4">Producto</th>
+                  <th class="text-center">Stock Local</th>
+                  <th class="text-center pe-4" style="width: 120px">Solicitar</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                @if (cargando()) {
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">Cargando inventario...</td>
+                  </tr>
+                } @else if (inventario().length === 0) {
+                  <tr>
+                    <td colspan="3" class="text-center py-4 text-muted">No hay stock registrado para tu sucursal.</td>
+                  </tr>
+                } @else {
+                  @for (prod of inventarioPaginado(); track prod.productoId) {
+                    <tr>
+                      <td class="ps-4">
+                        <div class="fw-bold" style="font-size: 0.95rem; color: #000 !important">{{ prod.nombre }}</div>
+                        <div class="text-muted small">{{ prod.categoria }} | SKU: {{ prod.id }}</div>
+                      </td>
+
+                      <td class="text-center">
+                        <span
+                          class="badge shadow-sm"
+                          style="font-size: 0.85rem"
+                          [ngClass]="{
+                            'bg-success-subtle text-success': getEstadoStock(prod) === 'Normal',
+                            'bg-warning-subtle text-dark border border-warning': getEstadoStock(prod) === 'Bajo',
+                            'bg-danger text-white': getEstadoStock(prod) === 'Agotado'
+                          }"
+                        >
+                          <i
+                            class="bi"
+                            [ngClass]="
+                              getEstadoStock(prod) === 'Normal'
+                                ? 'bi-check-circle'
+                                : getEstadoStock(prod) === 'Bajo'
+                                  ? 'bi-exclamation-triangle'
+                                  : 'bi-x-octagon'
+                            "
+                          ></i>
+                          {{ prod.stockCajas }} cajas
+                        </span>
+                      </td>
+
+                      <td class="text-center pe-4">
+                        <button
+                          class="btn btn-sm fw-bold w-100 btn-negrito text-white shadow-sm"
+                          (click)="agregarAlPedido(prod)"
+                          title="Agregar a la lista de pedido"
+                        >
+                          <i class="bi bi-box-arrow-in-right fs-6"></i> Pedir
+                        </button>
+                      </td>
+                    </tr>
+                  }
+
+                  @if (inventarioFiltrado().length === 0) {
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-muted">No hay productos para ese filtro.</td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      @if (!cargando() && totalPaginas() > 1) {
+        <app-pagination
+          class="mt-3 d-block"
+          [currentPage]="paginaActual()"
+          [totalPages]="totalPaginas()"
+          (pageChange)="paginaActual.set($event)"
+        ></app-pagination>
+      }
+    </div>
+
+    <div class="col-xl-4 col-lg-5 h-100">
+      <div class="card border-0 shadow-sm rounded-3 d-flex flex-column h-100">
+        <div class="card-header bg-dark text-white p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold"><i class="bi bi-truck me-2"></i>Pedido al Almacen</h6>
+            <span class="badge bg-danger rounded-pill">{{ solicitudPedido().length }} items</span>
+          </div>
+        </div>
+
+        <div class="card-body p-0 flex-grow-1 overflow-auto bg-light">
+          @if (solicitudPedido().length === 0) {
+            <div class="text-center text-muted p-5">
+              <i class="bi bi-boxes fs-1 opacity-25"></i>
+              <p class="mt-3 small">Selecciona productos de la izquierda para pedir cajas al almacen.</p>
+            </div>
+          }
+
+          <ul class="list-group list-group-flush">
+            @for (item of solicitudPedido(); track item.productoId; let i = $index) {
+              <li class="list-group-item p-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <span class="fw-bold text-dark lh-sm" style="font-size: 0.9rem; color: #000 !important">{{ item.nombre }}</span>
+                  <button class="btn btn-link text-danger p-0 border-0 ms-2" (click)="quitarDelPedido(i)" title="Quitar">
+                    <i class="bi bi-x-circle-fill fs-5"></i>
+                  </button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2 bg-white border rounded px-2 py-1">
+                  <span class="text-muted small">Cajas a solicitar:</span>
+                  <div class="d-flex align-items-center" style="width: 100px">
+                    <input
+                      type="number"
+                      class="form-control form-control-sm text-center fw-bold text-primary border-0"
+                      [(ngModel)]="item.cantidadPedir"
+                      min="1"
+                    />
+                    <span class="text-muted small ms-1">cajas</span>
+                  </div>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+
+          <button
+            class="btn btn-tema-rojo text-white w-100 py-3 fw-bold fs-5 rounded-3"
+            [disabled]="solicitudPedido().length === 0 || enviando()"
+            (click)="enviarSolicitud()"
+          >
+            <i class="bi bi-send-fill me-2"></i>
+            {{ enviando() ? 'ENVIANDO...' : 'ENVIAR SOLICITUD' }}
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>

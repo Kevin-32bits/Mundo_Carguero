@@ -1,0 +1,36 @@
+/* Botón Rojo Principal Sólido ("Confirmar") */
+.btn-tema-rojo {
+  background-color: #b02a2a; 
+  border-color: #b02a2a;
+  transition: all 0.2s;
+}
+
+.btn-tema-rojo:hover {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2);
+  transform: translateY(-1px); 
+}
+
+/* Opcional: Asegurarnos de que el modal tenga un diseño base en caso de que falte alguna otra clase */
+.factura-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.factura-modal {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}

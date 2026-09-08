@@ -1,0 +1,40 @@
+<div class="editar-overlay" *ngIf="mostrar" (click)="cerrarModal()">
+  <section class="editar-modal mini-modal" (click)="$event.stopPropagation()">
+    
+    <header class="ux-header">
+      <div class="ux-header-content">
+        <h3 class="ux-title">Nueva Categoría</h3>
+        <p class="ux-subtitle">Registra una nueva categoría para el inventario</p>
+      </div>
+      <button type="button" class="ux-btn-close" title="Cerrar modal" (click)="cerrarModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </header>
+
+    <form class="ux-form" (ngSubmit)="guardarCategoria()">
+
+      <div *ngIf="mensaje" class="alerta" [ngClass]="{'alerta-ok': tipoMensaje === 'ok', 'alerta-error': tipoMensaje === 'error'}">
+        {{ mensaje }}
+      </div>
+      
+      <div class="ux-section">
+        <div class="ux-grid" style="grid-template-columns: 1fr;"> <div class="ux-input-group">
+            <label for="nombreCategoria">Nombre de la Categoría</label>
+            <input type="text" id="nombreCategoria" name="nombreCategoria" class="ux-input" 
+                   [(ngModel)]="nuevaCategoria.nombre" [disabled]="guardando" 
+                   placeholder="Ej. Llantas y Neumáticos" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="ux-form-actions">
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()" [disabled]="guardando">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="guardando || !nuevaCategoria.nombre">
+          <i class="fas" [ngClass]="guardando ? 'fa-spinner fa-spin' : 'fa-save'"></i> 
+          {{ guardando ? 'Guardando...' : 'Registrar' }}
+        </button>
+      </div>
+
+    </form>
+  </section>
+</div>

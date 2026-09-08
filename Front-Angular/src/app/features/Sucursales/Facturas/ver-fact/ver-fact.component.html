@@ -1,0 +1,98 @@
+<div class="factura-modal-overlay" (click)="cerrarModal()">
+  <div class="factura-modal" (click)="$event.stopPropagation()">
+    
+    @if (cargando) {
+      <div class="text-center py-5 text-muted">
+        <div class="spinner-border spinner-border-sm me-2 text-danger" role="status"></div>
+        Cargando información...
+      </div>
+    } @else {
+      @if (factura; as fd) {
+        
+        <div class="modal-header-custom">
+          <div>
+            <h3 class="text-dark">
+              {{ fd.tipoComprobante }} <span style="color: #d32f2f;">{{ fd.serie || obtenerSerieComprobante(fd.id) }}-{{ fd.numero || obtenerNumeroComprobante(fd.id) }}</span>
+            </h3>
+            <p class="mb-0 text-muted small mt-1">Generado el {{ fd.fecha | date:'dd/MM/yyyy' }} a las {{ fd.fecha | date:'hh:mm a' }}</p>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill border border-success-subtle" style="font-size: 0.8rem;">
+              <i class="bi bi-check-circle-fill me-1"></i> {{ fd.estado }}
+            </span>
+            <button class="btn-close-custom" (click)="cerrarModal()" title="Cerrar">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body-custom">
+          
+        <div class="datos-box mb-4">
+            <div class="row gy-3">
+              <div class="col-4 dato-item">
+                <span class="dato-label">Cliente</span>
+                <span class="dato-valor text-dark">{{ fd.cliente || '-' }}</span>
+              </div>
+              <div class="col-3 dato-item">
+                <span class="dato-label">Documento</span>
+                <span class="dato-valor">{{ fd.documento || '-' }}</span>
+              </div>
+              <div class="col-3 dato-item">
+                <span class="dato-label">Teléfono</span>
+                <span class="dato-valor">{{ fd.telefono || '-' }}</span>
+              </div>
+              
+              <div class="col-2 dato-item">
+                <span class="dato-label">Vendedor</span>
+                <span class="dato-valor">{{ fd.vendedor || '-' }}</span>
+              </div>
+              <div class="col-4 dato-item">
+                <span class="dato-label">Pago</span>
+                <span class="dato-valor">{{ fd.metodoPago || '-' }}</span>
+              </div>
+              <div class="col-8 dato-item">
+                <span class="dato-label">Dirección</span>
+                <span class="dato-valor text-muted" [title]="fd.direccion">{{ fd.direccion || '-' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabla-scroll mb-1">
+            <table class="table mb-0 align-middle table-borderless">
+              <thead>
+                <tr>
+                  <th class="ps-4">SKU</th>
+                  <th>Producto</th>
+                  <th class="text-center">{{ esUnidad ? 'Unds' : 'Cajas' }}</th>
+                  <th class="text-end">Precio {{ esUnidad ? 'Und' : 'Caja' }}</th>
+                  <th class="text-end pe-4">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of fd.items; track item.sku) {
+                  <tr>
+                    <td class="ps-4 text-muted small">{{ item.sku }}</td>
+                    <td class="fw-medium text-dark">{{ item.nombre }}</td>
+                    <td class="text-center fw-bold">{{ item.cantidadCajas }}</td>
+                    <td class="text-end text-muted">S/ {{ item.precioCaja | number:'1.2-2' }}</td>
+                    <td class="text-end fw-bold text-dark pe-4">S/ {{ item.subTotal | number:'1.2-2' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-end mt-4 pt-3 border-top">
+            <div class="d-flex align-items-center">
+              <span class="text-muted text-uppercase fw-bold me-3" style="font-size: 0.8rem; letter-spacing: 0.5px;">Total:</span>
+              <span class="monto-total">S/ {{ fd.total | number:'1.2-2' }}</span>
+            </div>
+            <button class="btn-rojo-minimalista" (click)="cerrarModal()">Cerrar</button>
+          </div>
+
+        </div>
+      }
+    }
+  </div>
+</div>

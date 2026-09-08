@@ -1,0 +1,105 @@
+/* Color Institucional */
+
+.texto-rojo-oscuro {
+  color: #5c0a0a !important; 
+}
+
+/* Nuevo contenedor que calcula el alto exacto de la pantalla menos el encabezado */
+/* Nuevo contenedor con el cálculo corregido */
+.contenedor-principal {
+  /* Aumentamos de 170px a 240px para descontar la barra superior negra, títulos y márgenes */
+  height: calc(100vh - 240px); 
+  min-height: 450px; 
+}
+
+/* Forzamos a que las tarjetas no se estiren más de la altura permitida */
+.contenedor-principal .card {
+  overflow: hidden;
+}
+
+/* Altura dinámica para scroll */
+.panel-scroll {
+  height: calc(100vh - 140px); 
+  overflow-y: auto; 
+}
+
+/* Buscador enfocado (Contorno completo rojo oscuro) */
+.input-group .form-control:focus, 
+.input-group .input-group-text {
+  box-shadow: none !important;
+  border-color: #dee2e6;
+  transition: all 0.3s ease;
+}
+.input-group:focus-within .input-group-text,
+.input-group:focus-within .form-control {
+  border-color: #5c0a0a !important; 
+}
+.input-group:focus-within .bi-search {
+  color: #5c0a0a !important; 
+}
+
+/* --- NUEVO: Botón de Pedir Outline (Tu diseño anterior) --- */
+.btn-outline-tema-rojo {
+  color: #b02a2a; /* Tu color rojo */
+  background-color: transparent;
+  background-image: none;
+  border-color: #b02a2a;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-tema-rojo:hover {
+  color: #fff;
+  background-color: #b02a2a; /* Tu color rojo */
+  border-color: #b02a2a;
+  box-shadow: 0 4px 8px rgba(176, 42, 42, 0.2);
+  transform: translateY(-1px); 
+}
+/* Asegura que el ícono y texto cambien a blanco en hover */
+.btn-outline-tema-rojo:hover * {
+  color: white !important;
+}
+
+/* Botón Rojo Principal Sólido ("Enviar Solicitud") */
+.btn-tema-rojo {
+  background-color: #b02a2a; 
+  border-color: #b02a2a;
+  transition: all 0.2s;
+}
+.btn-tema-rojo:hover {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2);
+  transform: translateY(-1px); 
+}
+
+/* Simula el table-hover de Bootstrap en los Divs */
+.hover-fila {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.hover-fila:hover {
+  background-color: #f8f9fa; /* Tono gris claro idéntico al de Bootstrap */
+}
+
+/* Input de cantidad */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+  opacity: 1; 
+}
+input[type="number"]:focus {
+  outline: none;
+  box-shadow: none;
+  background-color: #f8f9fa;
+}
+
+/* Badges un poco más espaciosas */
+.badge {
+  padding: 0.5em 0.8em;
+  border-radius: 6px;
+}
+
+/* Scrollbar moderna */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #d1d1d1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background-color: #5c0a0a; }

@@ -1,0 +1,56 @@
+<section class="hero-section">
+  <div class="overlay"></div>
+
+  <video
+    #heroVideo
+    class="hero-bg-video"
+    muted
+    autoplay
+    loop
+    playsinline
+    preload="metadata"
+    (timeupdate)="actualizarProgreso()"> <source src="/assets/videos/inicio.mp4" type="video/mp4">
+  </video>
+
+  <header class="hero-header">
+      <span class="logo-text">EL MUNDO DEL CARGUERO</span>
+    <button class="menu-btn" aria-label="Abrir menú de navegación">
+    </button>
+  </header>
+
+  <main class="hero-content">
+    <h1 class="main-title">REPARACIÓN EXPERTA</h1>
+    <p class="subtitle">
+      Diagnósticos precisos, mantenimiento integral y soluciones profesionales para tu vehículo.
+    </p>
+    <button class="btn-outline-custom">CONTACTO SOPORTE</button>
+  </main>
+
+  <footer class="hero-footer">
+    
+    <div class="slider-indicator">
+      <div class="progress-bar-custom" aria-hidden="true">
+        <div class="progress-fill" [style.width]="progreso + '%'"></div>
+      </div>
+      <div class="numbers">
+        <span class="current">01</span>
+        <span class="total">/ 05</span>
+      </div>
+    </div>
+
+    <div class="social-icons">
+      <a href="https://www.facebook.com/GroupLozano/" target="_blank" rel="noopener noreferrer" aria-label="Visitar Facebook">
+        <i class="bi bi-facebook"></i>
+      </a>
+
+      <a href="https://www.tiktok.com/@elmundodelcarguero?_r=1&_t=ZS-961vz3awJrZ" target="_blank" rel="noopener noreferrer" aria-label="Visitar TikTok">
+        <i class="bi bi-tiktok"></i>
+      </a>
+
+      <a href="https://api.whatsapp.com/send?phone=51997905691" target="_blank" rel="noopener noreferrer" aria-label="Enviar WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+      </a>
+    </div>
+    
+  </footer>
+</section>

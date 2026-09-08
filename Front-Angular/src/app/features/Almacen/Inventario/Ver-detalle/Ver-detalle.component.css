@@ -1,0 +1,179 @@
+/* --- OVERLAY --- */
+.detalle-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background: rgba(0, 0, 0, 0.500); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* --- MODAL --- */
+.detalle-modal {
+  width: min(640px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- 1. ZONA DE IDENTIFICACIÓN --- */
+.ux-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 2rem 1.5rem;
+  background: #fafafa; /* Ligerísimo contraste para el header */
+  border-bottom: 1px solid #eaeaea;
+  border-radius: 12px 12px 0 0;
+}
+
+.ux-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ux-badge {
+  align-self: flex-start;
+  background: #c61f2b; /* Acento rojo */
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.ux-title {
+  margin: 0.2rem 0 0 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.ux-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Botón cerrar minimalista */
+.ux-btn-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: color 0.2s;
+}
+
+.ux-btn-close:hover {
+  color: #111827; /* Se oscurece en lugar de ponerse rojo, evita distracciones */
+}
+
+/* --- CUERPO DEL MODAL --- */
+.ux-body {
+  padding: 1.5rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Títulos de sección (Agrupación lógica) */
+.ux-section-title {
+  margin: 0 0 1rem 0;
+  font-size: 0.8rem;
+  color: #c61f2b; /* El rojo guía el inicio de una nueva sección */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.ux-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* --- GRUPOS DE DATOS (El núcleo de la UX) --- */
+.ux-data-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ux-data-group label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Diferentes pesos visuales según la importancia del dato */
+.ux-valor {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #111827;
+  font-weight: 500;
+}
+
+.ux-valor-destacado {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+.ux-valor-destacado span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.ux-valor-precio {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #000000;
+  font-weight: 700;
+}
+
+.ux-valor-texto {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Separadores limpios */
+.ux-divider {
+  height: 1px;
+  background-color: #f3f4f6;
+  width: 100%;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  .ux-grid-3 {
+    grid-template-columns: 1fr 1fr; /* Pasa a 2 columnas */
+    row-gap: 1.2rem;
+  }
+  .ux-header, .ux-body {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .ux-grid-3 {
+    grid-template-columns: 1fr; /* Pasa a 1 columna en móviles muy pequeños */
+  }
+}

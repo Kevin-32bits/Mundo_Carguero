@@ -1,0 +1,80 @@
+/* navbar.component.css - Propuesta Industrial */
+
+/* Fondo negro exacto con acento rojo en la parte inferior */
+.app-navbar {
+  background-color: #000000;
+  height: 80px;
+  color: #ffffff;
+  box-shadow: 0 4px 2px -2px rgba(255, 0, 0, 0.5);
+  /* Sombra roja sutil */
+  border-bottom: 2px solid rgba(255, 0, 0, 0.5);
+  /* Línea de acento roja vibrante */
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.navbar-brand-text {
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  /* Fuerza las mayúsculas */
+  color: #ffffff;
+  text-shadow: 0px 2px 8px rgba(255, 0, 0, 0.8);
+  /* Resplandor rojo */
+}
+
+/* Estilo para el contenedor del logo (corregido) */
+.navbar-logo-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  /* Un poco menos de padding vertical */
+  margin-top: 10px;
+  margin-right: 1.5rem;
+}
+
+/* Ajuste de la imagen del logo */
+.navbar-logo {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Ícono del menú burger (blanco por defecto) */
+.menu-icon {
+  font-size: 2rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  /* Transición suave */
+  margin-right: 0.5rem;
+}
+
+/* Hover para el menú burger (se vuelve rojo) */
+.menu-icon:hover {
+  color: #ff0000;
+}
+
+/* Estilo del badge de notificación (con sombra roja) */
+.notification-badge {
+  background-color: #ff0000;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: bold;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+  /* Sombra roja brillante */
+  position: absolute;
+  top: 1px;
+  right: -5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Clases de navbar-icon y profile-avatar-img eliminadas por completo */

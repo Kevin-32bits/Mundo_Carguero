@@ -1,0 +1,123 @@
+<div class="cotizacion-modal-overlay" (click)="cerrarModal()">
+  <div class="cotizacion-modal" (click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <h4 class="fw-bold mb-1">Editar Cotizacion</h4>
+        <p class="text-muted mb-0">Actualiza cliente, productos y monto</p>
+      </div>
+      <button class="btn-close" type="button" (click)="cerrarModal()"></button>
+    </div>
+
+    <div class="row g-2 mb-2">
+      <div class="col-md-4">
+        <label class="form-label small fw-bold">Tipo Doc.</label>
+        <select class="form-select" [(ngModel)]="formEditar.tipoDocumento">
+          <option value="DNI">DNI</option>
+          <option value="RUC">RUC</option>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label small fw-bold">Numero Documento</label>
+        <input type="text" class="form-control" [(ngModel)]="formEditar.numeroDocumento" />
+      </div>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Nombre / Razon Social</label>
+      <input type="text" class="form-control" [(ngModel)]="formEditar.clienteNombre" />
+    </div>
+
+    <div class="row g-2 mb-2">
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Telefono</label>
+        <input type="text" class="form-control" [(ngModel)]="formEditar.telefono" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Correo</label>
+        <input type="email" class="form-control" [(ngModel)]="formEditar.correo" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Direccion</label>
+      <input type="text" class="form-control" [(ngModel)]="formEditar.direccion" />
+    </div>
+
+    <div class="mb-2 fw-bold">Productos de la Cotizacion</div>
+    <div class="input-group mb-2">
+      <input 
+        class="form-control" 
+        placeholder="Buscar por SKU o nombre" 
+        [ngModel]="busquedaProducto()" 
+        (ngModelChange)="busquedaProducto.set($event)"
+        (keydown.enter)="agregarProductoPorBusqueda()" 
+      />
+      <button class="btn btn-outline-secondary" type="button" (click)="agregarProductoPorBusqueda()">Anadir</button>
+    </div>
+
+    <div class="table-responsive border rounded mb-2">
+      <table class="table table-sm align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>SKU</th>
+            <th>Producto</th>
+            <th style="width: 110px;">{{ esVentaPorUnidad() ? 'Unds' : 'Cajas' }}</th>
+            <th style="width: 120px;">Precio {{ esVentaPorUnidad() ? 'Unidad' : 'Caja' }}</th>
+            <th class="text-end">SubTotal</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of itemsEditar(); track item.productoId; let i = $index) {
+            <tr>
+              <td class="small">{{ item.sku }}</td>
+              <td class="small">{{ item.nombre }}</td>
+              <td>
+                <input 
+                  type="number" 
+                  min="1" 
+                  class="form-control form-control-sm" 
+                  [ngModel]="item.cantidad" 
+                  (ngModelChange)="actualizarCantidadCajas(i, $event)" 
+                />
+              </td>
+              <td>
+                <input 
+                  type="number" 
+                  min="0" 
+                  class="form-control form-control-sm bg-light text-muted" 
+                  [ngModel]="item.precio" 
+                  readonly tabindex="-1" 
+                />
+              </td>
+              <td class="text-end small fw-bold">S/ {{ (item.cantidad * item.precio) | number:'1.2-2' }}</td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-light text-danger" (click)="quitarProducto(i)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (itemsEditar().length === 0) {
+            <tr>
+              <td colspan="6" class="text-center text-muted py-2">Agrega al menos un producto.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <span class="fw-bold text-muted">TOTAL</span>
+      <span class="fw-bold fs-5 texto-rojo-oscuro">S/ {{ totalEditado() | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal()" [disabled]="guardandoEdicion()">Cancelar</button>
+      <button type="button" class="btn btn-tema-rojo text-white" (click)="guardarEdicionCotizacion()" [disabled]="guardandoEdicion()">
+        {{ guardandoEdicion() ? 'Guardando...' : 'Guardar Cambios' }}
+      </button>
+    </div>
+  </div>
+</div>

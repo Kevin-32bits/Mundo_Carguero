@@ -1,0 +1,111 @@
+<div class="editar-overlay" *ngIf="producto" (click)="cerrarModal()">
+  <section class="editar-modal" (click)="$event.stopPropagation()">
+    
+    <header class="ux-header">
+      <div class="ux-header-content">
+        <h3 class="ux-title">Editar Producto</h3>
+        <p class="ux-subtitle">Modificando información del SKU: <strong>{{ producto.sku }}</strong></p>
+      </div>
+      <button type="button" class="ux-btn-close" title="Cerrar modal" (click)="cerrarModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </header>
+
+    <form class="ux-form" (ngSubmit)="guardarCambios()">
+
+      <div *ngIf="mensaje()" class="alerta-mensaje" [ngClass]="{'alerta-ok': tipoMensaje() === 'ok', 'alerta-error': tipoMensaje() === 'error'}">
+        {{ mensaje() }}
+      </div>
+      
+      <div class="ux-section">
+        <h4 class="ux-section-title">Información Principal</h4>
+        <div class="ux-grid">
+          
+          <div class="ux-input-group span-2">
+            <label for="nombre">Nombre del Producto</label>
+            <input type="text" id="nombre" name="nombre" class="ux-input" 
+                   [(ngModel)]="productoEditado.nombre" [disabled]="guardando()" required />
+          </div>
+
+          <div class="ux-input-group">
+            <label for="categoria">Categoría</label>
+            <select id="categoria" name="categoria" class="ux-input" 
+                    [(ngModel)]="productoEditado.categoria" [disabled]="guardando()" required>
+              <option value="Accesorios y Seguridad">Accesorios y Seguridad</option>
+              <option value="Filtros">Filtros</option>
+              <option value="Aceites y Lubricantes">Aceites y Lubricantes</option>
+              <option value="Frenos">Frenos</option>
+            </select>
+          </div>
+
+          <div class="ux-input-group">
+            <label for="sku">Código SKU (No editable)</label>
+            <input type="text" id="sku" class="ux-input disabled" [value]="producto.sku" disabled />
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ux-section">
+        <h4 class="ux-section-title">Precios y Logística</h4>
+        <div class="ux-grid ux-grid-3">
+
+          <div class="ux-input-group">
+            <label for="costo">Costo Prov. (S/)</label>
+            <input type="number" id="costo" name="costo" class="ux-input" 
+                   [(ngModel)]="productoEditado.costoCaja" step="0.01" [disabled]="guardando()" />
+          </div>
+          
+          <div class="ux-input-group">
+            <label for="precio">Precio Venta (S/)</label>
+            <input type="number" id="precio" name="precio" class="ux-input" 
+                   [(ngModel)]="productoEditado.precioVentaCaja" step="0.01" [disabled]="guardando()" />
+          </div>
+
+          <div class="ux-input-group">
+            <label for="unidades">Und / Caja</label>
+            <input type="number" id="unidades" name="unidades" class="ux-input" 
+                   [(ngModel)]="productoEditado.unidadesPorCaja" [disabled]="guardando()" />
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ux-section">
+        <h4 class="ux-section-title">Datos del Proveedor</h4>
+        <div class="ux-grid">
+          
+          <div class="ux-input-group">
+            <label for="proveedor">Nombre del Proveedor</label>
+            <input type="text" id="proveedor" name="proveedor" class="ux-input" 
+                   [(ngModel)]="productoEditado.proveedor" [disabled]="guardando()" />
+          </div>
+
+          <div class="ux-input-group">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" name="telefono" class="ux-input" 
+                   [(ngModel)]="productoEditado.telefono" [disabled]="guardando()" />
+          </div>
+
+        </div>
+      </div>
+
+      <div class="ux-section">
+        <div class="ux-input-group">
+          <label for="descripcion">Descripción Adicional</label>
+          <textarea id="descripcion" name="descripcion" class="ux-input ux-textarea" rows="3" 
+                    [(ngModel)]="productoEditado.descripcion" [disabled]="guardando()"></textarea>
+        </div>
+      </div>
+
+      <div class="ux-form-actions">
+        <button type="button" class="btn-cancelar" (click)="cerrarModal()" [disabled]="guardando()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="guardando()">
+          <i class="fas" [ngClass]="guardando() ? 'fa-spinner fa-spin' : 'fa-save'"></i> 
+          {{ guardando() ? 'Guardando...' : 'Guardar Cambios' }}
+        </button>
+      </div>
+
+    </form>
+  </section>
+</div>

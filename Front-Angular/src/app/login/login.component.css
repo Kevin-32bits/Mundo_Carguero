@@ -1,0 +1,346 @@
+input::-ms-reveal,
+input::-ms-clear {
+  display: none !important;
+}
+
+.main-wrapper {
+  /* El rojo claro está en el centro y se difumina a negro hacia los bordes */
+  background: radial-gradient(circle at center, #b30000 0%, #240505 65%, #000000 90%);
+  min-height: 100vh;
+}
+
+.card-container {
+  /* Ancho dinámico: Toma el 90% de la pantalla, pero nunca pasa de 850px en PC grandes */
+  width: 50vw;
+  max-width: 850px;
+
+  /* Alto dinámico: Toma el 65% de la altura de la pantalla */
+  height: 75vh;
+  min-height: 500px;
+  /* Evita que se aplaste demasiado en pantallas bajitas */
+  max-height: 650px;
+  /* Evita que se estire demasiado en monitores gigantes */
+
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: transparent;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* ── ADAPTACIÓN PARA MÓVILES Y TABLETS ── */
+@media (max-width: 768px) {
+  .card-container {
+    width: 50vw;
+      /* Aprovecha casi todo el ancho del celular */
+    height: 75vh;    /* Deja que el contenido decida la altura */
+    min-height: 400px;
+    /* Altura mínima cómoda para los dedos */
+  }
+
+  .right-side-bg {
+    /* Reducimos un poco el padding (espaciado interno) en pantallas pequeñas */
+    padding: 2.5rem 1.5rem !important;
+    border-radius: 20px;
+    /* Mantiene las esquinas redondeadas al ocultarse la imagen */
+  }
+}
+
+.left-side-bg {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
+    url('/assets/img/login_img.webp');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
+.copyright-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.322);
+  margin-bottom: 0;
+  font-weight: 490;
+}
+
+.right-side-bg {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.482)),
+    url('/assets/img/login_cont.webp') center / cover no-repeat;
+  height: 100%;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right-side-bg a {
+  color: #a0a0a0;
+}
+
+.custom-input .input-group-text,
+.custom-input .form-control::placeholder {
+  color: #adb5bd;
+}
+
+.custom-input {
+  background-color: #f62e2e00;
+  border: 1px solid #70737e;
+  border-radius: 8px !important;
+}
+
+.custom-input .input-group-text,
+.custom-input .form-control {
+  background: transparent;
+  border: none;
+  color: #70737e;
+}
+
+.custom-input .form-control {
+  color: white !important;
+}
+
+.btn-ingresar {
+  background-color: #ff0000;
+  border: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.btn-ingresar:hover {
+  background-color: #cc0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+/* ── MODAL DE ERROR ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-error {
+  background: linear-gradient(145deg, #1a0000 0%, #2d0505 60%, #1a0000 100%);
+  border: 1px solid #8b0000;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.25), 0 20px 40px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  animation: slideUp 0.25s ease;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-error-icon {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #ff0000 0%, #8b0000 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+
+.modal-error-icon i {
+  font-size: 1.75rem;
+  color: #fff;
+}
+
+.modal-error-title {
+  color: #ff4444;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.modal-error-message {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.modal-error-btn {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 2rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.25s, box-shadow 0.25s;
+  letter-spacing: 0.5px;
+}
+
+.modal-error-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.45);
+}
+
+/* Botón del modal deshabilitado (gris) */
+.modal-error-btn:disabled {
+  background-color: #6c757d;
+  color: #fff;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.95;
+}
+
+/* ── MENSAJE INLINE (intentos 1–4) ── */
+.error-inline {
+  color: #ff6b6b;
+  /* Un rojo claro que resalta en fondos oscuros */
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-top: -40px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── MODAL DE BLOQUEO ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-error {
+  background: linear-gradient(145deg, #1a0000 0%, #2d0505 60%, #1a0000 100%);
+  border: 1px solid #8b0000;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.25), 0 20px 40px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-error-icon {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #ff0000 0%, #8b0000 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+
+.modal-error-icon i {
+  font-size: 1.75rem;
+  color: #fff;
+}
+
+.modal-error-title {
+  color: #ff4444;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.modal-error-message {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.modal-countdown {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ff4444;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.modal-error-btn {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 2rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.25s, box-shadow 0.25s;
+  letter-spacing: 0.5px;
+}
+
+.modal-error-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.45);
+}
+
+/* Botón deshabilitado durante el bloqueo */
+.btn-ingresar:disabled {
+  background-color: #5a0000;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.8;
+}

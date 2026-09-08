@@ -1,0 +1,75 @@
+<div class="factura-modal-overlay" (click)="cerrarModalFacturar()">
+  <div class="factura-modal" (click)="$event.stopPropagation()">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <div>
+        <h4 class="fw-bold mb-1">Facturar Venta</h4>
+        <p class="text-muted mb-0">Completa o busca los datos del cliente</p>
+      </div>
+      <button class="btn-close" type="button" (click)="cerrarModalFacturar()"></button>
+    </div>
+
+    @if (mensajeModal()) {
+      <div class="alert py-2" [ngClass]="tipoMensajeModal() === 'error' ? 'alert-danger' : 'alert-success'">
+        {{ mensajeModal() }}
+      </div>
+    }
+
+    <div class="row g-2 mb-2">
+      <div class="col-md-4">
+        <label class="form-label small fw-bold">Tipo Doc.</label>
+        <select class="form-select" [(ngModel)]="clienteForm.tipoDocumento">
+          <option value="DNI">DNI</option>
+          <option value="RUC">RUC</option>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label small fw-bold">Numero Documento</label>
+        <div class="input-group">
+          <input type="text" class="form-control" [(ngModel)]="clienteForm.numeroDocumento" placeholder="Ej: 7123..." (keydown.enter)="buscarClientePorDocumento()" />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            title="Buscar cliente por documento"
+            (click)="buscarClientePorDocumento()"
+            [disabled]="buscandoCliente()"
+          >
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-2">
+      <label class="form-label small fw-bold">Nombre del Cliente</label>
+      <input type="text" class="form-control" [(ngModel)]="clienteForm.nombre" />
+    </div>
+
+    <div class="row g-2 mb-2">
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Telefono</label>
+        <input type="text" class="form-control" [(ngModel)]="clienteForm.telefono" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-bold">Correo</label>
+        <input type="text" class="form-control" [(ngModel)]="clienteForm.correo" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label small fw-bold">Direccion</label>
+      <input type="text" class="form-control" [(ngModel)]="clienteForm.direccion" />
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 small text-muted">
+      <span>Items del carrito: <strong>{{ carrito.length }}</strong></span>
+      <span>Total: <strong>S/ {{ totalVenta | number:'1.2-2' }}</strong></span>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary" (click)="cerrarModalFacturar()" [disabled]="facturando()">Cancelar</button>
+      <button type="button" class="btn btn-tema-rojo text-white" (click)="confirmarFacturacion()" [disabled]="facturando()">
+        {{ facturando() ? 'Guardando...' : 'Confirmar' }}
+      </button>
+    </div>
+  </div>
+</div>

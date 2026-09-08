@@ -1,0 +1,235 @@
+:host {
+  display: block;
+}
+
+.panel-contenido {
+  min-height: calc(100vh - 120px);
+  padding: 1.5rem;
+  background: #f6f7fb;
+  border-radius: 14px;
+  border: 1px solid #e4e8f0;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  color: #1f2937;
+}
+
+.cabecera-seccion {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #c61f2b;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cabecera-titulos { margin-bottom: 0.9rem; }
+.titulo-pagina { margin: 0; font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 700; color: #111827; }
+.controles-filtro { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.control-busqueda { position: relative; width: 100%; max-width: 460px; }
+.control-busqueda i { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.85rem; color: #8a95a7; }
+.control-busqueda input { width: 100%; padding: 0.68rem 0.75rem 0.68rem 2rem; border-radius: 10px; border: 1px solid #d6dbe4; background: #fff; color: #111827; outline: none; }
+.control-busqueda input:focus { border-color: #d33642; box-shadow: 0 0 0 3px rgba(211, 54, 66, 0.15); }
+
+.filtros-categoria { display: flex; align-items: center; flex-wrap: wrap; gap: 0.6rem; }
+.label-filtro { font-size: 0.9rem; font-weight: 600; color: #4b5563; }
+.tags-filtro { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tags-filtro button { border: 1px solid #d5dbe7; background: #fff; color: #334155; border-radius: 999px; padding: 0.4rem 0.85rem; font-size: 0.82rem; cursor: pointer; }
+.tags-filtro button.activo { background: #c61f2b; border-color: #c61f2b; color: #fff; }
+
+.estado-vista { background: #fff; border: 1px dashed #d7dce7; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+.estado-vista h3 { margin: 0; font-size: 1rem; color: #334155; }
+.estado-vista.error { border-color: #f1b6bb; background: #fff6f7; }
+
+.listado-secciones {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.seccion-categoria {
+  background: #fff;
+  border: 1px solid #e6e9f0;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.tabla-contenedor {
+  width: 100%;
+  overflow-x: auto; 
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.tabla-inventario {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+  white-space: nowrap; 
+}
+
+.tabla-inventario thead tr {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.tabla-inventario th {
+  padding: 0.85rem 1rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.tabla-inventario td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.tabla-inventario tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.sku-badge {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #1f2937;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.nombre-producto {
+  font-weight: 600;
+  color: #0f172a;
+  white-space: normal; 
+  min-width: 250px;
+}
+
+.precio {
+  font-weight: 600;
+}
+
+.stock-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.stock-badge.alto { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+.stock-badge.medio { background: #fef08a; color: #854d0e; border-color: #fde047; }
+.stock-badge.bajo, 
+.stock-badge.critico { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+
+.col-acciones {
+  text-align: center;
+}
+
+.acciones-fila {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-accion {
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-accion.primario { background: #c61f2b; color: #fff; }
+.btn-accion.primario:hover { background: #a81a24; transform: translateY(-1px); }
+
+.btn-accion.secundario { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+.btn-accion.secundario:hover { background: #e2e8f0; color: #0f172a; transform: translateY(-1px); }
+
+@media (max-width: 720px) {
+  .panel-contenido {
+    padding: 1rem;
+  }
+}
+
+/* --- BOTONES DE ACCIÓN (UX) --- */
+.col-acciones {
+  text-align: center;
+  min-width: 140px; 
+}
+
+.acciones-fila {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem; 
+}
+
+.btn-accion {
+  border-radius: 6px;
+  width: 34px;
+  height: 34px;
+  /* El borde transparente evita que el botón cambie de tamaño al hacer hover */
+  border: 1px solid transparent; 
+  background: transparent; /* Sin fondo estático */
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* 1. VER - Celeste (Acción de información/lectura) */
+.btn-ver {
+  color: #0284c7; /* Se mantiene gris neutro cuando está estático */
+}
+.btn-ver:hover {
+  background: #0284c7; /* Fondo celeste muy suave */
+  border-color: #7dd3fc; /* Borde celeste sutil */
+  color: #ffffff; /* Ícono azul/celeste más fuerte para resaltar */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.15);
+}
+
+/* 2. EDITAR - Rojo */
+.btn-editar {
+  color: #c61f2b;
+}
+.btn-editar:hover {
+  background: #c61f2b;
+  border-color: #c61f2b;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(198, 31, 43, 0.2);
+}
+
+/* 3. + STOCK - Verde */
+.btn-stock {
+  color: #16a34a;
+  gap: 3px;
+}
+.btn-stock:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+}
+
+.btn-stock .signo-mas {
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-top: -2px;
+}

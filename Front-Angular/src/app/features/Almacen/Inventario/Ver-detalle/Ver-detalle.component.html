@@ -1,0 +1,71 @@
+<div class="detalle-overlay" *ngIf="producto" (click)="cerrarModal()">
+  <section class="detalle-modal" (click)="$event.stopPropagation()">
+    
+    <!-- 1. ZONA DE IDENTIFICACIÓN (Lo que es el producto) -->
+    <header class="ux-header">
+      <div class="ux-header-content">
+        <span class="ux-badge">SKU: {{ producto.sku }}</span>
+        <h3 class="ux-title">{{ producto.nombre }}</h3>
+        <p class="ux-subtitle">{{ producto.categoria || 'Sin categoría asignada' }}</p>
+      </div>
+      <button class="ux-btn-close" (click)="cerrarModal()" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </header>
+
+    <div class="ux-body">
+      
+      <!-- 2. ZONA OPERATIVA (Lo que importa para la venta y almacén) -->
+      <div class="ux-section">
+        <h4 class="ux-section-title">Estado y Comercial</h4>
+        <div class="ux-grid-3">
+          <div class="ux-data-group">
+            <label>Stock Disponible</label>
+            <p class="ux-valor-destacado">{{ producto.stockCajas }} <span>cajas</span></p>
+          </div>
+          <div class="ux-data-group">
+            <label>Precio Venta</label>
+            <p class="ux-valor-precio">S/ {{ producto.precioVentaCaja | number:'1.2-2' }}</p>
+          </div>
+          <div class="ux-data-group">
+            <label>Unidades / Caja</label>
+            <p class="ux-valor">{{ producto.unidadesPorCaja }} und.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ux-divider"></div>
+
+      <!-- 3. ZONA LOGÍSTICA (De dónde viene y cuánto costó) -->
+      <div class="ux-section">
+        <h4 class="ux-section-title">Datos de Abastecimiento</h4>
+        <div class="ux-grid-3">
+          <div class="ux-data-group">
+            <label>Costo Proveedor</label>
+            <p class="ux-valor">S/ {{ producto.costoCaja | number:'1.2-2' }}</p>
+          </div>
+          <div class="ux-data-group">
+            <label>Proveedor</label>
+            <p class="ux-valor">{{ producto.proveedor || 'No registrado' }}</p>
+          </div>
+          <div class="ux-data-group">
+            <label>Teléfono Prov.</label>
+            <p class="ux-valor">{{ producto.telefono || '---' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ux-divider"></div>
+
+      <!-- 4. ZONA DE CONTEXTO (Notas largas) -->
+      <div class="ux-section">
+        <div class="ux-data-group">
+          <label>Descripción Adicional</label>
+          <p class="ux-valor-texto">{{ producto.descripcion || 'El producto no cuenta con detalles adicionales en el sistema.' }}</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</div>

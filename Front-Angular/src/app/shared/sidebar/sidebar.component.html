@@ -1,0 +1,76 @@
+<div class="sidebar d-flex flex-column py-3 text-white h-100">
+
+  <ul class="nav nav-pills flex-column mt-0">
+    <li class="nav-item mb-2" *ngFor="let item of menuOpciones">
+      <a [routerLink]="item.ruta" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{exact: true}" #rla="routerLinkActive"
+         [class.disabled]="rla.isActive"
+         class="nav-link text-white d-flex align-items-center"
+         (mouseenter)="leerTextoEnVozAlta('Ir a ' + item.titulo)">
+        <i class="bi {{ item.icono }} me-3"></i>
+        <span>{{ item.titulo }}</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-auto w-100">
+    
+<!-- Controles de Accesibilidad -->
+    <div class="px-3 mb-3 d-flex gap-2">
+      
+      <!-- Botón de Voz -->
+      <button 
+        class="btn btn-sm w-50 d-flex justify-content-center align-items-center shadow-sm btn-accesibilidad"
+        [ngClass]="{'btn-voz-activo activo': lectorActivo()}"
+        (click)="toggleLector()"
+        (mouseenter)="leerTextoEnVozAlta('Botón para ' + (lectorActivo() ? 'desactivar' : 'activar') + ' lector de voz')">
+        <i class="bi fs-6" [ngClass]="lectorActivo() ? 'bi-mic-fill' : 'bi-mic-mute-fill'"></i>
+        <span class="ms-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">VOZ</span>
+      </button>
+      
+      <!-- Botón de Filtro -->
+      <button 
+        class="btn btn-sm w-50 d-flex justify-content-center align-items-center shadow-sm btn-accesibilidad"
+        [ngClass]="{'btn-filtro-activo activo': filtroAzulActivo()}"
+        (click)="toggleFiltroAzul()"
+        (mouseenter)="leerTextoEnVozAlta('Botón para ' + (filtroAzulActivo() ? 'desactivar' : 'activar') + ' filtro azul')">
+        <i class="bi fs-6" [ngClass]="filtroAzulActivo() ? 'bi-droplet-fill' : 'bi-droplet'"></i>
+        <span class="ms-2 fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">FILTRO</span>
+      </button>
+      
+    </div>
+    
+    <div class="user-profile">
+      <img src="assets/img/usuario.png" alt="Perfil" class="rounded-circle profile-img">
+      <div class="user-details">
+        <span class="user-name fw-bold">{{ usuarioLogueado }}</span>
+        <span class="user-role">{{ rolParaMostrar }}</span>
+      </div>
+    </div>
+
+    <a role="button" (click)="cerrarSesion()" class="nav-link text-white d-flex align-items-center mx-3 mb-4 btn-logout" (mouseenter)="leerTextoEnVozAlta('Cerrar sesión del sistema')">
+      <i class="bi bi-power me-3 text-danger"></i>
+      <span>Cerrar sesión</span>
+    </a>
+
+  </div>
+
+</div>
+
+<div class="simple-overlay" *ngIf="mostrarAvisoInactividad">
+  <div class="simple-modal">
+    
+    <h3 *ngIf="!sesionExpirada">¿Sigues trabajando?</h3>
+    <h3 *ngIf="sesionExpirada">Sesión Expirada</h3>
+
+    <p *ngIf="!sesionExpirada">Tu sesión se cerrará en <strong>{{ tiempoFormateado }}</strong> segundos por inactividad.</p>
+    <p *ngIf="sesionExpirada">El tiempo de espera ha finalizado. Por favor, cierra sesión.</p>    
+    
+    <div class="simple-actions">
+      <button class="btn-cancel" (click)="cerrarSesion()" (mouseenter)="leerTextoEnVozAlta('Botón rojo. Confirmar cerrar sesión')">Cerrar sesión</button>
+      
+      <button class="btn-confirm" *ngIf="!sesionExpirada" (click)="seguirTrabajando()" (mouseenter)="leerTextoEnVozAlta('Botón de continuar. Seguir trabajando en el sistema')">Continuar</button>
+    </div>
+  </div>
+</div>

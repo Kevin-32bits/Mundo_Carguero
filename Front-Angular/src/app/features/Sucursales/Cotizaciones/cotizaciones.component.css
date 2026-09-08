@@ -1,0 +1,124 @@
+/* Color Institucional */
+.texto-rojo-oscuro {
+  color: #5c0a0a !important; 
+}
+
+.panel-scroll {
+  height: calc(100vh - 80px); 
+  overflow-y: auto; 
+}
+
+/* Botón Principal */
+.btn-tema-rojo {
+  background-color: #b02a2a; 
+  border-color: #b02a2a;
+  transition: all 0.3s ease;
+}
+
+.btn-tema-rojo:hover {
+  background-color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.2);
+  transform: translateY(-1px); 
+}
+
+/* Badges de Estado */
+.badge {
+  padding: 0.5em 0.8em;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.bg-success-subtle { background-color: #d1e7dd !important; }
+.text-success { color: #0f5132 !important; }
+
+.bg-warning-subtle { background-color: #fff3cd !important; }
+.text-dark { color: #664d03 !important; }
+
+/* Botones de acción en la tabla */
+.btn-group .btn {
+  transition: all 0.2s;
+}
+.btn-group .btn:hover {
+  background-color: #f8f9fa;
+  filter: brightness(0.95);
+}
+
+/* Scrollbar moderna */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #d1d1d1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background-color: #5c0a0a; }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.custom-filter-group:hover .form-control,
+.custom-filter-group:hover .input-group-text {
+  background-color: #fbfbfb !important;
+}
+
+.custom-filter-group .btn-limpiar {
+  border-color: #dee2e6;
+  z-index: 5;
+}
+
+.custom-filter-group .btn-limpiar:hover {
+  background-color: #fff5f5 !important;
+}
+
+.custom-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1040;
+}
+
+.custom-month-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 300px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 18px;
+  z-index: 1050;
+  animation: fadeInDropdown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.meses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.meses-grid .btn {
+  border-radius: 8px;
+  padding: 8px 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-rojo-oscuro {
+  background-color: #5c0a0a !important;
+  border-color: #5c0a0a !important;
+}
+
+.btn-rojo-oscuro:hover {
+  background-color: #7a0e0e !important;
+}
+
+@keyframes fadeInDropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
