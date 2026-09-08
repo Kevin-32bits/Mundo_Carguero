@@ -1,0 +1,21 @@
+﻿# Build
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Dotnet local caches
+**/.nuget/
+**/.dotnet/
+
+# Local check artifacts
+**/bin_check/
+**/bin_check_clean/
+**/bin_check_verify/
+
+# Local logs
+**/run-out.log
+**/run-err.log

@@ -1,0 +1,27 @@
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5210
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\Users\Kevin\Documents\Proyectos\Proyect_C#\Api_M_Carguero\Api_M_Carguero
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (44ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [r].[Id], [r].[NombreRol] AS [Nombre]
+      FROM [Roles] AS [r]
+      ORDER BY [r].[NombreRol]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [u].[Id], [u].[Nombre]
+      FROM [Ubicaciones] AS [u]
+      ORDER BY [u].[Nombre]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[NombreCompleto], [e].[DNI], [e].[Telefono], [e].[UbicacionId], CAST(1 AS bit), [u].[Nombre], [e].[EstadoLaboral], [e].[RolId], [r].[NombreRol], [e].[Usuario]
+      FROM [Empleados] AS [e]
+      INNER JOIN [Ubicaciones] AS [u] ON [e].[UbicacionId] = [u].[Id]
+      LEFT JOIN [Roles] AS [r] ON [e].[RolId] = [r].[Id]
+      ORDER BY [e].[EstadoLaboral] DESC, [e].[NombreCompleto]
