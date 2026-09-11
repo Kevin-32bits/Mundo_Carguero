@@ -26,7 +26,20 @@ export class LoginComponent implements OnInit {
   bloqueado: boolean = false;
   tiempoRestante: number = 0;
   cargando: boolean = false;
+  mostrarToast: boolean = false;
+  mensajeToast: string = '';
   private intervalo: any = null;
+
+  mostrarPrivacidad: boolean = false;
+
+  // Agrega estos métodos al final de tu clase
+  abrirPrivacidad(): void {
+    this.mostrarPrivacidad = true;
+  }
+
+  cerrarPrivacidad(): void {
+    this.mostrarPrivacidad = false;
+  }
 
   ngOnInit(): void {
     // 1. Verificamos el estado al cargar la página por primera vez
@@ -149,10 +162,24 @@ export class LoginComponent implements OnInit {
             this.iniciarBloqueo(5); //tiempo de bloqueo
           } else {
             this.mensajeError = mensajeServidor;
+            const intentosRestantes = 3 - this.intentosFallidos;
+           const textoIntento = intentosRestantes === 1 ? 'intento restante' : 'intentos restantes';
+            this.mostrarMensajeFlotante(`Atención: Te queda ${intentosRestantes} ${textoIntento}.`);
             this.cdr.detectChanges();
           }
         }
       });
+  }
+
+  private mostrarMensajeFlotante(mensaje: string): void {
+  this.mensajeToast = mensaje;
+  this.mostrarToast = true;
+  
+  // Ocultar automáticamente después de 3 segundos
+  setTimeout(() => {
+    this.mostrarToast = false;
+    this.cdr.detectChanges();
+    }, 3000);
   }
 
   verificarCampos(usuario: string, contrasena: string): void {
@@ -194,3 +221,4 @@ export class LoginComponent implements OnInit {
     return `${m}:${s.toString().padStart(2, '0')}`;
   }
 }
+
