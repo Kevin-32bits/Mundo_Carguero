@@ -45,7 +45,10 @@
             <!-- CONTENEDOR INFERIOR: Copyright y Selector de Idioma -->
             <div class="mt-auto pt-3 text-center d-flex flex-column align-items-center">
               <p class="copyright-text mb-3">
-                {{ textosLogin[idiomaSeleccionado].derechos }}
+                {{ textosLogin[idiomaSeleccionado].derechos }}<br>
+                <a href="javascript:void(0)" (click)="abrirPrivacidad()" class="enlace-privacidad mt-1 d-inline-block">
+                  {{ textosLogin[idiomaSeleccionado].privacidad }}
+                </a>
               </p>
               
               <select class="language-selector" (change)="cambiarIdioma($event)">
@@ -79,5 +82,35 @@
       {{ textosLogin[idiomaSeleccionado].porSeguridad }}
     </p>
     <div class="modal-countdown">{{ tiempoFormateado }}</div>
+  </div>
+</div>
+  <!-- Notificación Flotante de Intentos Restantes -->
+<div class="toast-flotante" *ngIf="mostrarToast">
+  <i class="bi bi-exclamation-triangle-fill"></i>
+  <span>{{ mensajeToast }}</span>
+</div>
+
+<!-- Modal de Declaración de Privacidad -->
+<div class="modal-overlay" *ngIf="mostrarPrivacidad" (click)="cerrarPrivacidad()">
+  <div class="modal-documento" (click)="$event.stopPropagation()">
+    <div class="modal-header-doc">
+      <h5 class="text-white mb-0 fw-bold">
+        <i class="bi bi-shield-check me-2"></i> Declaración de Privacidad
+      </h5>
+      <button class="btn-cerrar-doc" (click)="cerrarPrivacidad()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body-doc">
+      <h6>1. Recopilación de Datos de Acceso</h6>
+      <p>Al iniciar sesión, el sistema registra su dirección IP, fecha y hora de acceso, y navegador utilizado. Esta información se almacena temporalmente con el único propósito de auditar la seguridad, prevenir fraudes y bloquear intentos de acceso no autorizados.</p>
+
+      <h6>2. Uso de Cookies y Sesiones (Tokens)</h6>
+      <p>Utilizamos tecnologías de almacenamiento local (Local Storage y Session Storage) para gestionar su sesión (JWT). Estos elementos son estrictamente necesarios para el funcionamiento técnico del sistema y no se utilizan para rastreo publicitario.</p>
+
+      <h6>3. Cumplimiento Normativo</h6>
+      <p>El tratamiento de los datos de autenticación se realiza en estricto cumplimiento con la <strong>Ley N° 29733</strong> (Ley de Protección de Datos Personales). Sus credenciales viajan encriptadas y no son compartidas con terceros bajo ninguna circunstancia.</p>
+    </div>
   </div>
 </div>

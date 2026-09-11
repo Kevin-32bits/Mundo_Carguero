@@ -375,3 +375,150 @@ input::-ms-clear {
   background-color: #1a0000;
   color: #ffffff;
 }
+/* ── NOTIFICACIÓN FLOTANTE (TOAST) ── */
+.toast-flotante {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 10000;
+  animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.toast-flotante i {
+  font-size: 1.2rem;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* ── ENLACE DE PRIVACIDAD ── */
+.enlace-privacidad {
+  color: #ff4444;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.enlace-privacidad:hover {
+  color: #ff9800;
+  text-decoration: underline;
+}
+
+/* ── MODAL DOCUMENTO (PRIVACIDAD) ── */
+.modal-documento {
+  background: #150000;
+  border: 1px solid #4a0000;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 550px;
+  max-height: 80vh;
+  /* Ocupa máximo el 80% de la pantalla */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+  animation: scaleUp 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-header-doc {
+  background: linear-gradient(90deg, #3d0000 0%, #150000 100%);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #4a0000;
+}
+
+.btn-cerrar-doc {
+  background: transparent;
+  color: #a0a0a0;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-cerrar-doc:hover {
+  color: #ff4444;
+}
+
+.modal-body-doc {
+  padding: 1.5rem;
+  overflow-y: auto;
+  /* Permite hacer scroll si el texto es muy largo */
+  color: #d1d1d1;
+  font-size: 0.9rem;
+}
+
+.modal-body-doc h6 {
+  color: #ff6b6b;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body-doc h6:first-child {
+  margin-top: 0;
+}
+
+.modal-body-doc p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+/* Scrollbar personalizado para el modal */
+.modal-body-doc::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body-doc::-webkit-scrollbar-track {
+  background: #150000;
+}
+
+.modal-body-doc::-webkit-scrollbar-thumb {
+  background: #4a0000;
+  border-radius: 10px;
+
+}

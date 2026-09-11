@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   // --- DICCIONARIO DE IDIOMAS ---
   idiomaSeleccionado: string = 'es';
   
-  textosLogin: any = {
+textosLogin: any = {
     es: {
       bienvenido: 'Bienvenido',
       iniciarSesion: 'Iniciar Sesión',
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'INGRESAR',
       espera: 'Espera',
       derechos: '© 2026 Sistema de Gestión Empresarial. Todos los derechos reservados.',
+      privacidad: 'Declaración de Privacidad', // <--- Esta línea faltaba
       accesoBloqueado: 'Acceso Bloqueado',
       intentos1: 'Has fallado',
       intentos2: 'intentos consecutivos.',
@@ -47,6 +48,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'LOGIN',
       espera: 'Wait',
       derechos: '© 2026 Enterprise Management System. All rights reserved.',
+      privacidad: 'Privacy Statement',
       accesoBloqueado: 'Access Blocked',
       intentos1: 'You have failed',
       intentos2: 'consecutive attempts.',
@@ -63,6 +65,7 @@ export class LoginComponent implements OnInit {
       ingresar: '登录',
       espera: '等待',
       derechos: '© 2026 企业管理系统。保留所有权利。',
+      privacidad: '隐私声明',
       accesoBloqueado: '访问被锁定',
       intentos1: '您已连续失败',
       intentos2: '次尝试。',
@@ -79,6 +82,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'ENTRAR',
       espera: 'Aguarde',
       derechos: '© 2026 Sistema de Gestão Empresarial. Todos os direitos reservados.',
+      privacidad: 'Declaração de Privacidade',
       accesoBloqueado: 'Acesso Bloqueado',
       intentos1: 'Você falhou',
       intentos2: 'tentativas consecutivas.',
@@ -95,6 +99,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'ENTRER',
       espera: 'Attendez',
       derechos: '© 2026 Système de Gestion d\'Entreprise. Tous droits réservés.',
+      privacidad: 'Déclaration de Confidentialité',
       accesoBloqueado: 'Accès Bloqué',
       intentos1: 'Vous avez échoué',
       intentos2: 'tentatives consécutives.',
@@ -111,6 +116,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'ANMELDEN',
       espera: 'Warten',
       derechos: '© 2026 Unternehmensverwaltungssystem. Alle Rechte vorbehalten.',
+      privacidad: 'Datenschutzerklärung',
       accesoBloqueado: 'Zugriff Blockiert',
       intentos1: 'Sie haben',
       intentos2: 'Fehlversuche hintereinander.',
@@ -127,6 +133,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'دخول',
       espera: 'انتظر',
       derechos: '© 2026 نظام إدارة المؤسسات. جميع الحقوق محفوظة.',
+      privacidad: 'بيان الخصوصية',
       accesoBloqueado: 'تم حظر الوصول',
       intentos1: 'لقد فشلت',
       intentos2: 'محاولات متتالية.',
@@ -143,6 +150,7 @@ export class LoginComponent implements OnInit {
       ingresar: 'ログイン',
       espera: 'お待ちください',
       derechos: '© 2026 企業管理システム。無断複写・転載を禁じます。',
+      privacidad: 'プライバシーポリシー',
       accesoBloqueado: 'アクセスブロック',
       intentos1: '連続して',
       intentos2: '回の試行に失敗しました。',
@@ -169,7 +177,20 @@ export class LoginComponent implements OnInit {
   bloqueado: boolean = false;
   tiempoRestante: number = 0;
   cargando: boolean = false;
+  mostrarToast: boolean = false;
+  mensajeToast: string = '';
   private intervalo: any = null;
+
+  mostrarPrivacidad: boolean = false;
+
+  // Agrega estos métodos al final de tu clase
+  abrirPrivacidad(): void {
+    this.mostrarPrivacidad = true;
+  }
+
+  cerrarPrivacidad(): void {
+    this.mostrarPrivacidad = false;
+  }
 
   ngOnInit(): void {
     this.sincronizarEstadoBloqueo();
@@ -288,10 +309,24 @@ export class LoginComponent implements OnInit {
             this.iniciarBloqueo(5);
           } else {
             this.mensajeError = mensajeServidor;
+            const intentosRestantes = 3 - this.intentosFallidos;
+           const textoIntento = intentosRestantes === 1 ? 'intento restante' : 'intentos restantes';
+            this.mostrarMensajeFlotante(`Atención: Te queda ${intentosRestantes} ${textoIntento}.`);
             this.cdr.detectChanges();
           }
         }
       });
+  }
+
+  private mostrarMensajeFlotante(mensaje: string): void {
+  this.mensajeToast = mensaje;
+  this.mostrarToast = true;
+  
+  // Ocultar automáticamente después de 3 segundos
+  setTimeout(() => {
+    this.mostrarToast = false;
+    this.cdr.detectChanges();
+    }, 3000);
   }
 
   verificarCampos(usuario: string, contrasena: string): void {
@@ -333,3 +368,4 @@ export class LoginComponent implements OnInit {
     return `${m}:${s.toString().padStart(2, '0')}`;
   }
 }
+
