@@ -1,0 +1,73 @@
+# ==========================================
+# 1. BACKEND: C# / .NET
+# ==========================================
+# Build
+**/bin/
+**/obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Dotnet local caches
+**/.nuget/
+**/.dotnet/
+
+# Local check artifacts
+**/bin_check/
+**/bin_check_clean/
+**/bin_check_verify/
+
+# Local logs
+**/run-out.log
+**/run-err.log
+
+# ==========================================
+# 2. FRONTEND: Angular / Node
+# ==========================================
+# Compiled output
+dist/
+tmp/
+out-tsc/
+bazel-out/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Miscellaneous
+.angular/cache/
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+testem.log
+typings/
+__screenshots__/
+
+# ==========================================
+# 3. IDEs, Editores y SO
+# ==========================================
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
