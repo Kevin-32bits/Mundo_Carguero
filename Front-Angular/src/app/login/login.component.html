@@ -3,21 +3,26 @@
     <div class="row g-0 h-100">
 
       <div class="col-md-6 d-none d-md-block left-side-bg"></div>
-      <div class="col-12 col-md-6 right-side-bg p-5 d-flex flex-column justify-content-center">
+      
+      <!-- Soporte RTL agregado al panel derecho -->
+      <div class="col-12 col-md-6 right-side-bg p-5 d-flex flex-column justify-content-center" 
+           [dir]="idiomaSeleccionado === 'ar' ? 'rtl' : 'ltr'">
         <div class="mx-auto w-100" style="max-width: 320px;">
-          <h2 class="text-white fw-bold mb-1">Bienvenido</h2>
-          <p class="text-white-50 small mb-4">Iniciar Sesión</p>
+          <h2 class="text-white fw-bold mb-1">{{ textosLogin[idiomaSeleccionado].bienvenido }}</h2>
+          <p class="text-white-50 small mb-4">{{ textosLogin[idiomaSeleccionado].iniciarSesion }}</p>
 
           <form (ngSubmit)="ingresarAlSistema(usuarioInput.value, passwordInput.value)">
             <div class="input-group mb-3 custom-input">
               <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-              <input #usuarioInput type="text" class="form-control shadow-none" placeholder="Usuario"
+              <input #usuarioInput type="text" class="form-control shadow-none" 
+                     [placeholder]="textosLogin[idiomaSeleccionado].usuario"
                      (input)="verificarCampos(usuarioInput.value, passwordInput.value)">
             </div>
             
             <div class="input-group mb-2 custom-input">
               <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-              <input #passwordInput [type]="Contra_Visible ? 'text' : 'password'" class="form-control shadow-none" placeholder="Contraseña"
+              <input #passwordInput [type]="Contra_Visible ? 'text' : 'password'" class="form-control shadow-none" 
+                     [placeholder]="textosLogin[idiomaSeleccionado].contrasena"
                      (input)="verificarCampos(usuarioInput.value, passwordInput.value)">
               <span class="input-group-text" role="button" (click)="OJOPassword()">
                 <i class="bi" [class]="Contra_Visible ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
@@ -31,16 +36,28 @@
             <button type="submit"
                     class="btn btn-ingresar w-100 py-2 fw-bold text-white mb-3 mt-3"
                     [disabled]="bloqueado">
-              <span *ngIf="!bloqueado">INGRESAR</span>
+              <span *ngIf="!bloqueado">{{ textosLogin[idiomaSeleccionado].ingresar }}</span>
               <span *ngIf="bloqueado">
-                <i class="bi bi-clock-fill me-1"></i> Espera {{ tiempoFormateado }}
+                <i class="bi bi-clock-fill me-1"></i> {{ textosLogin[idiomaSeleccionado].espera }} {{ tiempoFormateado }}
               </span>
             </button>
 
-            <div class="mt-auto pt-3 text-center">
-              <p class="copyright-text">
-                © 2026 Sistema de Gestión Empresarial. Todos los derechos reservados.
+            <!-- CONTENEDOR INFERIOR: Copyright y Selector de Idioma -->
+            <div class="mt-auto pt-3 text-center d-flex flex-column align-items-center">
+              <p class="copyright-text mb-3">
+                {{ textosLogin[idiomaSeleccionado].derechos }}
               </p>
+              
+              <select class="language-selector" (change)="cambiarIdioma($event)">
+                <option value="es" selected>Español</option>
+                <option value="en">English</option>
+                <option value="zh">简体中文 (Chino)</option>
+                <option value="pt">Português</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch (Alemán)</option>
+                <option value="ar">العربية (Árabe)</option>
+                <option value="ja">日本語 (Japonés)</option>
+              </select>
             </div>
           </form>
         </div>
@@ -50,15 +67,16 @@
   </div>
 </div>
 
-<div class="modal-overlay" *ngIf="mostrarErrorLogin">
+<!-- MODAL DE BLOQUEO (Con soporte RTL) -->
+<div class="modal-overlay" *ngIf="mostrarErrorLogin" [dir]="idiomaSeleccionado === 'ar' ? 'rtl' : 'ltr'">
   <div class="modal-error" (click)="$event.stopPropagation()">
     <div class="modal-error-icon">
       <i class="bi bi-shield-lock-fill"></i>
     </div>
-    <p class="modal-error-title">Acceso Bloqueado</p>
+    <p class="modal-error-title">{{ textosLogin[idiomaSeleccionado].accesoBloqueado }}</p>
     <p class="modal-error-message">
-      Has fallado <strong>{{ intentosFallidos }} intentos</strong> consecutivos.<br>
-      Por seguridad, debes esperar antes de intentarlo de nuevo.
+      {{ textosLogin[idiomaSeleccionado].intentos1 }} <strong>{{ intentosFallidos }} {{ textosLogin[idiomaSeleccionado].intentos2 }}</strong><br>
+      {{ textosLogin[idiomaSeleccionado].porSeguridad }}
     </p>
     <div class="modal-countdown">{{ tiempoFormateado }}</div>
   </div>
